@@ -1,26 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { compose } from 'recompose';
+import 'react-router-dom';
+import styled from 'styled-components';
 
-function App() {
+
+import { withTheme } from './components/Theme';
+
+import SidebarNav from './components/SidebarNav';
+
+const AppContainer = styled.div`
+  background: ${props=>props.theme.white};
+`;
+
+const App = props => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppContainer className="container-fluid">
+      <div className="row">
+        <SidebarNav />
+      </div>
+    </AppContainer>
   );
 }
 
-export default App;
+export default compose(
+  withTheme
+)(App);
