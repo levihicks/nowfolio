@@ -1,4 +1,4 @@
-const HOME = "/";
-const ACCOUNT = "/account";
-const SEARCH = "/search";
-const COMPARE = "/compare";
+export const HOME = "/";
+export const ACCOUNT = "/account";
+export const SEARCH = "/search";
+export const COMPARE = "/compare";
