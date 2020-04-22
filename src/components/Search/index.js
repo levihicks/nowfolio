@@ -3,6 +3,12 @@ import { alphavantageAxios } from '../../axios';
 import Searchbar from './Searchbar';
 import SearchResults from './SearchResults';
 import Spinner from '../UI/Spinner';
+import styled from 'styled-components';
+
+const SearchPage = styled.div
+`
+    margin-top: 30px;
+`
 
 const Search = () => {
     const [searchInput, setSearchInput] = useState("");
@@ -31,11 +37,11 @@ const Search = () => {
     }
 
     return (
-        <div className="offset-1 col-8">
+        <SearchPage className="offset-2 col-8">
             <Searchbar change={(inputVal) => changeHandler(inputVal)} value={searchInput}/>
             {!searchResults && searchInput !== "" && <Spinner />}
             {searchResults && <SearchResults searchResults={searchResults} />}
-        </div>
+        </SearchPage>
     )
 };
 

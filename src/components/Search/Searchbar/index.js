@@ -7,7 +7,6 @@ const StyledSearchbar = styled.div
 `
     display: flex;
     align-items: center;
-    margin-top: 30px;
     border-bottom: 3px solid ${props => props.theme.black};
 `;
 

@@ -18,6 +18,7 @@ const StyledSidebarNav = styled.div
     align-items: center;
     flex-direction: column;
     color: white;
+    position: fixed;
     padding: 0;
 `;
 
@@ -37,6 +38,7 @@ const StyledNavLink = styled(NavLink)
 `;
 
 const SidebarNav = props => {
+    const sidebarActiveStyle = {background: "#2BA84A"};
     return (
         <StyledSidebarNav className="col-sm-1">
             
@@ -46,26 +48,22 @@ const SidebarNav = props => {
             <StyledNavLink 
                 exact 
                 to={ROUTES.HOME} 
-                activeStyle={{borderTop: "1px solid #2D3A3A", 
-                    borderBottom: "1px solid #2D3A3A"}}>
+                activeStyle={sidebarActiveStyle}>
                 <NavEl src={HomeIcon} />
             </StyledNavLink>
             <StyledNavLink 
                 to={ROUTES.SEARCH} 
-                activeStyle={{borderTop: "1px solid #2D3A3A", 
-                    borderBottom: "1px solid #2D3A3A"}}>
+                activeStyle={sidebarActiveStyle}>
                 <NavEl src={SearchIcon} />
             </StyledNavLink>
             <StyledNavLink 
                 to={ROUTES.COMPARE} 
-                activeStyle={{borderTop: "1px solid #2D3A3A", 
-                    borderBottom: "1px solid #2D3A3A"}}>
+                activeStyle={sidebarActiveStyle}>
                 <NavEl src={CompareIcon} />
             </StyledNavLink>
             <StyledNavLink 
                 to={ROUTES.ACCOUNT} 
-                activeStyle={{borderTop: "1px solid #2D3A3A", 
-                    borderBottom: "1px solid #2D3A3A"}} 
+                activeStyle={sidebarActiveStyle} 
                 style={{marginTop: "auto"}}>
                 <NavEl src={SignInIcon} />
             </StyledNavLink>
