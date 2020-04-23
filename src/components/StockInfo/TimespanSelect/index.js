@@ -48,7 +48,7 @@ const TimespanOptionEl = styled.button
 
 const TimespanSelect = props => {
 
-    const [timespan, setTimespan] = useState("Past Week");
+    const timespan = useState("Past Week")[0];
     const [optionsDisplayed, setOptionsDisplayed] = useState(false);
 
     return (
