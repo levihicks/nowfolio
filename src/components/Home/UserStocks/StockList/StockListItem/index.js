@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
 import OptionsIcon from '../../../../../assets/listItemOptions.svg';
+import {StockInfoContext} from '../../../../../contexts/StockInfoContext';
 
 const StyledStockListItem = styled.div
 `
@@ -18,16 +19,17 @@ const StockListItemEl = styled.div
     padding: 10px;
     font-size: 1rem;
     font-weight: bold;
-    color: ${props => props.theme.gray};
+    color: ${props => props.active ? props.theme.green : props.theme.gray};
 `;
 
 const Popover = styled.div
 `
     position: absolute;
+    z-index: 2;
     left: 100%;
     border: 1px solid ${props => props.theme.gray};
     padding: 5px;
-    
+    background: ${props => props.theme.white};
     button {
         color: ${props => props.theme.black};
         outline: none;
@@ -49,6 +51,10 @@ const Popover = styled.div
 
 const StockListItem = ({name, shares, tag, price, delta, id, hasOptionsActive, openOptions }) => {
 
+    const stockInfoContext = useContext(StockInfoContext);
+
+    const setStockInfo = () => stockInfoContext.setTag(tag);
+
     const toggleOptions = () => {
         if(hasOptionsActive === id)
             openOptions(null)
@@ -59,8 +65,10 @@ const StockListItem = ({name, shares, tag, price, delta, id, hasOptionsActive, o
     return (
         <StyledStockListItem>
             <StockListItemEl 
+                active={stockInfoContext.tag === tag}
                 style={{marginRight: "auto", 
-                    cursor: "pointer"}}>
+                    cursor: "pointer"}}
+                onClick={setStockInfo}>
                 {tag} {shares && `(${shares})`}
             </StockListItemEl>
             <StockListItemEl>

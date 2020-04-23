@@ -1,5 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
+
+import {StockInfoContext} from '../../../contexts/StockInfoContext';
+
+//import {compose} from 'recompose';
+import {withRouter} from 'react-router-dom';
+import * as ROUTES from '../../../constants/routes';
 
 const SearchResultsBase = styled.div
 `
@@ -29,10 +35,12 @@ const ViewButton = styled.button
     border: 3px solid ${props => props.theme.green};
     color: ${props => props.theme.green};
     font-weight: bold;
-    outline: none;
     &:hover {
         background: ${props => props.theme.green};
         color: ${props => props.theme.white}; 
+    }
+    &:focus {
+        outline: none;
     }
 `;
 
@@ -41,16 +49,26 @@ const NoResults = styled(SearchResultsBase)
     justify-content: center;
 `;
 
-const SearchResult = ({ sym, name }) => (
+const SearchResult = withRouter(props => {
+    const { sym, name } = props;
+    const stockInfoContext = useContext(StockInfoContext);
+
+    const clickHandler = () => {
+        stockInfoContext.setTag(sym);
+        props.history.push(ROUTES.STOCK_INFO);
+    }
+
+    return (
     <StyledSearchResult>
         <NameAndSymbol>
             {sym} - {name}
         </NameAndSymbol>
-        <ViewButton>
+        <ViewButton onClick={clickHandler}>
             View
         </ViewButton>
     </StyledSearchResult>
-)
+    );
+})
 
 const SearchResults = ({ searchResults }) => {
 

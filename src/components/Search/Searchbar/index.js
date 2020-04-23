@@ -32,7 +32,7 @@ const ClearButton = styled.img
     cursor: pointer;
     height: 25px;
     &:hover {
-        opacity: .5;
+        opacity: ${props => props.theme.buttonHoverOpacity};
     }
 `;
 

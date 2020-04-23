@@ -6,7 +6,9 @@ const theme = {
     gray: "#2D3A3A",
     green: "#248232",
     lightGreen: "#2BA84A",
-    white: "#FCFFFC"
+    white: "#FCFFFC",
+    red: "#A82C33",
+    buttonHoverOpacity: "0.5"
 };
 
 export const withTheme = Component => props => (

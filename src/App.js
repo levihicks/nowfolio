@@ -12,6 +12,8 @@ import Home from './components/Home';
 import Search from './components/Search';
 import Compare from './components/Compare';
 import Account from './components/Account';
+import StockInfo from './components/StockInfo'
+import { withStockInfoContextProvider } from './contexts/StockInfoContext'
 
 const AppContainer = styled.div`
   background: ${props=>props.theme.white};
@@ -27,6 +29,7 @@ const App = props => {
           <Route path={ROUTES.SEARCH} component={Search} />
           <Route path={ROUTES.COMPARE} component={Compare} />
           <Route path={ROUTES.ACCOUNT} component={Account} />
+          <Route path={ROUTES.STOCK_INFO} component={StockInfo} />
         </div>
         
       </AppContainer>
@@ -36,5 +39,6 @@ const App = props => {
 }
 
 export default compose(
-  withTheme
+  withTheme,
+  withStockInfoContextProvider
 )(App);

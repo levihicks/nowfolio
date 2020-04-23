@@ -26,10 +26,22 @@ const Total = styled.div
 `;
 
 const portfolio = [{name:"Dow Jones", shares: "1", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 1},
-                    {name:"Dow Jones", shares: "2", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 2}];
+                    {name:"Dow Jones", shares: "2", tag:"IBM", price: "116.33", delta: "-3.55%", id: 2},
+                    {name:"Dow Jones", shares: "1", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 1},
+                    {name:"Dow Jones", shares: "1", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 1},
+                    {name:"Dow Jones", shares: "1", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 1},
+                    {name:"Dow Jones", shares: "1", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 1},
+                    {name:"Dow Jones", shares: "1", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 1},
+                    {name:"Dow Jones", shares: "1", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 1},
+                    {name:"Dow Jones", shares: "1", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 1},
+                    {name:"Dow Jones", shares: "1", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 1},
+                    {name:"Dow Jones", shares: "1", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 1},
+                    {name:"Dow Jones", shares: "1", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 1},
+                    {name:"Dow Jones", shares: "1", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 1},
+                    {name:"Dow Jones", shares: "1", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 1}];
 
-const watchList = [{name:"Dow Jones", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 1},
-{name:"Dow Jones", tag:"DOWJ", price: "116.33", delta: "-3.55%", id: 2}];
+const watchList = [{name:"Dow Jones", tag:"AAPL", price: "116.33", delta: "-3.55%", id: 1},
+{name:"Dow Jones", tag:"GM", price: "116.33", delta: "-3.55%", id: 2}];
 
 const UserStocks = props => {
     const [portfolioActive, setPortfolioActive] = useState(true);
@@ -54,7 +66,7 @@ const UserStocks = props => {
             {
                 portfolioActive && 
                 <Total>
-                    Total: {total}
+                    Total: {total.toFixed(2)}
                 </Total>
             }
         </StyledUserStocks>
