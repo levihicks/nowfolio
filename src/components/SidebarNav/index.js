@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import NowfolioIcon from '../../assets/nowfolio.svg';
@@ -6,7 +6,9 @@ import HomeIcon from '../../assets/home.svg';
 import SearchIcon from '../../assets/search.svg';
 import CompareIcon from '../../assets/compare.svg';
 import SignInIcon from '../../assets/signIn.svg';
+import AccountIcon from '../../assets/account.svg';
 import { NavLink } from 'react-router-dom';
+import {AuthContext} from '../../session';
 
 import * as ROUTES from '../../constants/routes';
 
@@ -39,6 +41,8 @@ const StyledNavLink = styled(NavLink)
 
 const SidebarNav = props => {
     const sidebarActiveStyle = {background: "#2BA84A"};
+    const authContext = useContext(AuthContext);
+    // console.log(authContext.uid);
     return (
         <StyledSidebarNav className="col-sm-1">
             
@@ -61,12 +65,22 @@ const SidebarNav = props => {
                 activeStyle={sidebarActiveStyle}>
                 <NavEl src={CompareIcon} />
             </StyledNavLink>
-            <StyledNavLink 
-                to={ROUTES.AUTHENTICATE} 
-                activeStyle={sidebarActiveStyle} 
-                style={{marginTop: "auto"}}>
-                <NavEl src={SignInIcon} />
-            </StyledNavLink>
+            {
+                authContext ?
+                <StyledNavLink 
+                    to={ROUTES.ACCOUNT} 
+                    activeStyle={sidebarActiveStyle} 
+                    style={{marginTop: "auto"}}>
+                    <NavEl src={AccountIcon} />
+                </StyledNavLink>
+                :
+                <StyledNavLink 
+                    to={ROUTES.AUTHENTICATE} 
+                    activeStyle={sidebarActiveStyle} 
+                    style={{marginTop: "auto"}}>
+                    <NavEl src={SignInIcon} />
+                </StyledNavLink>
+            }
         </StyledSidebarNav>
     )
 }

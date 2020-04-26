@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import FormInput from '../UI/FormInput';
 import FormSubmit from '../UI/FormSubmit';
+import { AuthContext } from '../../session';
+import Spinner from '../UI/Spinner';
+import * as ROUTES from '../../constants/routes';
+import { Redirect } from 'react-router-dom';
+import { 
+    doCreateUserWithEmailAndPassword,
+    doSignInWithEmailAndPassword 
+} from '../../firebase'; 
 
 const AuthenticateForm = styled.form
 `
@@ -52,6 +60,10 @@ const LinkButton = styled.button
 const Authenticate = props => {
 
     const [loggingIn, setLoggingIn] = useState(true);
+    const [emailInput, setEmailInput] = useState("");
+    const [passwordInput, setPasswordInput] = useState("");
+    const [loading, setLoading] = useState(false);
+    const auth = useContext(AuthContext);
 
     const toggleAuthenticateMode = (event) => {
         event.preventDefault();
@@ -64,27 +76,49 @@ const Authenticate = props => {
         <PromptText>Already have an account? <LinkButton onClick={toggleAuthenticateMode}>Login</LinkButton></PromptText>
     );
 
-    
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setLoading(true);
+        const authMethod = loggingIn ? 
+            doSignInWithEmailAndPassword :
+            doCreateUserWithEmailAndPassword;
+        authMethod(emailInput, passwordInput)
+            .then(() => {
+                setLoading(false);
+            })
+            .catch(err => console.log(err));
+    }
 
-    return (
-        <React.Fragment>
-            <AuthenticateForm className="offset-4 col-4 my-auto">
+    const AuthForm = (
+        <AuthenticateForm onSubmit={handleSubmit} className="offset-4 col-4 my-auto">
                 <AuthenticateFormHeader>
                     { loggingIn ? "Login" : "Sign Up" }
                 </AuthenticateFormHeader>
                 <div style={{margin: "auto"}}>
-                <FormInput label="Email" type="text" />
-                <FormInput label="Password" type="password" />
+                <FormInput 
+                    label="Email" 
+                    type="text"
+                    value={emailInput}
+                    change={(event) => setEmailInput(event.target.value)} />
+                <FormInput 
+                    label="Password" 
+                    type="password"
+                    value={passwordInput}
+                    change={(event) => setPasswordInput(event.target.value)} />
                 {
                     !loggingIn && 
                     <FormInput label="Verify Password" type="password" />
                 }
                 <FormSubmit 
-                    val={ loggingIn ? "Login" : "Sign Up" } 
-                    click={(event) => {event.preventDefault()}} />
+                    val={ loggingIn ? "Login" : "Sign Up" }  />
                 </div>
                 {promptText}
-            </AuthenticateForm>
+        </AuthenticateForm>
+    )
+
+    return (
+        <React.Fragment>
+          {loading ? <Spinner /> : auth ? <Redirect to={ROUTES.HOME} /> : AuthForm}  
         </React.Fragment>
     );
 };

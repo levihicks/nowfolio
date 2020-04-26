@@ -25,7 +25,10 @@ const FormInput = props => {
     return (
         <FormInputContainer>
             <Label>{props.label}</Label>
-            <StyledFormInput type={props.type} />
+            <StyledFormInput 
+                value={props.value}
+                type={props.type} 
+                onChange={props.change}/>
         </FormInputContainer>
     );
 };

@@ -16,6 +16,7 @@ import CoinInfo from './components/CoinInfo'
 import Authenticate from './components/Authenticate';
 import { withCoinInfoContextProvider } from './contexts/CoinInfoContext';
 import { withCoinsContextProvider } from './contexts/CoinsContext';
+import { withAuthProvider } from './session';
 
 const AppContainer = styled.div`
   background: ${props=>props.theme.white};
@@ -45,4 +46,5 @@ export default compose(
   withTheme,
   withCoinsContextProvider,
   withCoinInfoContextProvider,
+  withAuthProvider
 )(App);
