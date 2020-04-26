@@ -50,7 +50,7 @@ const Searchbar = props => {
                 ref={searchInput}
                 type="text"
                 onChange={(event) => props.change(event.target.value)}
-                placeholder="Search stocks..."
+                placeholder="Search coins..."
                 value={props.value}
                 />
             {

@@ -1,11 +1,10 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { alphavantageAxios } from '../../axios';
+import React, { useState, useEffect, useContext } from 'react';
 import Searchbar from './Searchbar';
 import SearchResults from './SearchResults';
-import Spinner from '../UI/Spinner';
 import styled from 'styled-components';
 import withErrorModal from '../../hoc/withErrorModal';
 import { compose } from 'recompose';
+import { CoinsContext } from '../../contexts/CoinsContext';
 
 const SearchPage = styled.div
 `
@@ -13,37 +12,31 @@ const SearchPage = styled.div
 `
 
 const Search = props => {
+
+    const coinsContext = useContext(CoinsContext);
     const [searchInput, setSearchInput] = useState("");
     const [searchResults, setSearchResults] = useState(null);
-    const { setError } = props;
+    console.log("coinContext: ",coinsContext);
+    const fetchResults = () => {
+        if(searchInput !== "")
+            setSearchResults(coinsContext.filter(c => 
+                c.tag.toLowerCase().includes(searchInput.toLowerCase()) 
+                || c.name.toLowerCase().includes(searchInput.toLowerCase())
+            ));
+    };
 
-    let timer = useRef(null);
-
-    const fetchSearch = useCallback((inputVal) => {
-        alphavantageAxios.get('query?function=SYMBOL_SEARCH&keywords='+encodeURIComponent(inputVal))
-            .then(res => setSearchResults(res.data.bestMatches))
-            .catch(err => {setError(err)});
-    }, [setError]);
-
-    useEffect(() => {
-        if (timer.current)
-            clearTimeout(timer.current);
-        if (searchInput !== "")
-            timer.current = setTimeout(()=>fetchSearch(searchInput), 1000);
-    }, [searchInput, fetchSearch])
+    useEffect(fetchResults, [searchInput])
 
     const changeHandler = (inputVal) => {
-        if(searchResults)
+        if(inputVal==="")
             setSearchResults(null);
-        if(inputVal !== searchInput)
-            setSearchInput(inputVal);
+        setSearchInput(inputVal);
     }
 
     return (
         <SearchPage className="offset-2 col-8">
             {/* {error && <Modal hide={() => setError(null)}>{error.message}</Modal>} */}
             <Searchbar change={(inputVal) => changeHandler(inputVal)} value={searchInput}/>
-            {!searchResults && searchInput !== "" && <Spinner />}
             {searchResults && <SearchResults searchResults={searchResults} />}
         </SearchPage>
     )

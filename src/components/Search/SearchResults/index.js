@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components';
 
-import {StockInfoContext} from '../../../contexts/StockInfoContext';
+import {CoinInfoContext} from '../../../contexts/CoinInfoContext';
 
 //import {compose} from 'recompose';
 import {withRouter} from 'react-router-dom';
@@ -50,18 +50,18 @@ const NoResults = styled(SearchResultsBase)
 `;
 
 const SearchResult = withRouter(props => {
-    const { sym, name } = props;
-    const stockInfoContext = useContext(StockInfoContext);
+    const { coin } = props;
+    const coinInfoContext = useContext(CoinInfoContext);
 
     const clickHandler = () => {
-        stockInfoContext.setTag(sym);
+        coinInfoContext.setNewCoin(coin.tag+"-"+coin.quoteCurrency);
         props.history.push(ROUTES.STOCK_INFO);
     }
 
     return (
     <StyledSearchResult>
         <NameAndSymbol>
-            {sym} - {name}
+            {coin.name} ({coin.tag+"-"+coin.quoteCurrency})
         </NameAndSymbol>
         <ViewButton onClick={clickHandler}>
             View
@@ -73,12 +73,14 @@ const SearchResult = withRouter(props => {
 const SearchResults = ({ searchResults }) => {
 
     const resultsDisplay = searchResults.length > 0 ? 
-        searchResults.map(r => 
-        <SearchResult 
-            key={Math.random().toString()}
-            sym={r["1. symbol"]}
-            name={r["2. name"]}/>    
-        ) 
+        searchResults.map(r => {
+            const id = r.tag+"-"+r.quoteCurrency;
+            return (
+                <SearchResult 
+                    key={id}
+                    coin={r}/>
+            );
+        }) 
         : <NoResults>No results.</NoResults>;
     return (
         <React.Fragment>

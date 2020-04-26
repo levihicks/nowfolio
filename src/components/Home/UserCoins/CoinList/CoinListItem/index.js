@@ -1,9 +1,9 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components';
 import OptionsIcon from '../../../../../assets/listItemOptions.svg';
-import {StockInfoContext} from '../../../../../contexts/StockInfoContext';
+import {CoinInfoContext} from '../../../../../contexts/CoinInfoContext';
 
-const StyledStockListItem = styled.div
+const StyledCoinListItem = styled.div
 `
     border-top: 1px solid ${props => props.theme.gray};
     display: flex;
@@ -14,7 +14,7 @@ const StyledStockListItem = styled.div
     }
 `;
 
-const StockListItemEl = styled.div
+const CoinListItemEl = styled.div
 `
     padding: 10px;
     font-size: 1rem;
@@ -49,11 +49,13 @@ const Popover = styled.div
     
 `;
 
-const StockListItem = ({name, shares, tag, price, delta, id, hasOptionsActive, openOptions }) => {
+const CoinListItem = ({name, shares, tag, price, delta, quoteCurrency, id, hasOptionsActive, openOptions }) => {
 
-    const stockInfoContext = useContext(StockInfoContext);
+    const coinInfoContext = useContext(CoinInfoContext);
 
-    const setStockInfo = () => stockInfoContext.setTag(tag);
+    const setCoinInfo = () => {
+        coinInfoContext.setNewCoin(tag+"-"+quoteCurrency);
+    };
 
     const toggleOptions = () => {
         if(hasOptionsActive === id)
@@ -62,38 +64,39 @@ const StockListItem = ({name, shares, tag, price, delta, id, hasOptionsActive, o
             openOptions(id);
     };
 
+
     return (
-        <StyledStockListItem>
-            <StockListItemEl 
-                active={stockInfoContext.tag === tag}
+        <StyledCoinListItem>
+            <CoinListItemEl 
+                active={coinInfoContext.currentCoin && coinInfoContext.currentCoin.tag+"-"+coinInfoContext.currentCoin.quoteCurrency === id}
                 style={{marginRight: "auto", 
                     cursor: "pointer"}}
-                onClick={setStockInfo}>
-                {tag} {shares && `(${shares})`}
-            </StockListItemEl>
-            <StockListItemEl>
+                onClick={setCoinInfo}>
+                {id} {shares && `(${shares})`}
+            </CoinListItemEl>
+            <CoinListItemEl>
                 {price}
-            </StockListItemEl>
-            <StockListItemEl 
+            </CoinListItemEl>
+            <CoinListItemEl 
                 style={{fontSize: ".75rem", 
                     color: delta[0] === "-" ? "#A82C33" : "#2BA84A"}}>
                 {delta}
-            </StockListItemEl>
-            <StockListItemEl>
+            </CoinListItemEl>
+            <CoinListItemEl>
                 <img height="30" 
                     alt="" 
                     src={OptionsIcon} 
                     style={{cursor: "pointer"}} 
                     onClick={toggleOptions}/>
-            </StockListItemEl>
+            </CoinListItemEl>
             {hasOptionsActive === id &&
             <Popover>
                 <button>Edit</button>
                 <button>Remove</button>
             </Popover>
             }
-        </StyledStockListItem>
+        </StyledCoinListItem>
     );
 }
 
-export default StockListItem;
+export default CoinListItem;

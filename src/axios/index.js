@@ -1,3 +1,3 @@
-import alphavantageAxios from './alphavantage';
+import coinbaseAxios from './coinbase';
 
-export { alphavantageAxios };
+export { coinbaseAxios };

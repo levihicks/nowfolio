@@ -62,7 +62,7 @@ const SidebarNav = props => {
                 <NavEl src={CompareIcon} />
             </StyledNavLink>
             <StyledNavLink 
-                to={ROUTES.ACCOUNT} 
+                to={ROUTES.AUTHENTICATE} 
                 activeStyle={sidebarActiveStyle} 
                 style={{marginTop: "auto"}}>
                 <NavEl src={SignInIcon} />
