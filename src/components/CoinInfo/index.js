@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import {withRouter, useLocation} from 'react-router-dom';
+import {withRouter, useLocation, Link} from 'react-router-dom';
 import {compose} from 'recompose';
 import * as ROUTES from '../../constants/routes';
 import {CoinInfoContext} from '../../contexts/CoinInfoContext';
@@ -12,7 +12,8 @@ import AddToWatchlist from '../../assets/addToWatchlist.svg';
 import withErrorModal from '../../hoc/withErrorModal';
 import Spinner from '../UI/Spinner';
 import { coinbaseAxios } from '../../axios';
-import PlaceholderMsg from '../UI/PlaceholderMsg';
+import {AuthContext} from '../../session';
+// import PlaceholderMsg from '../UI/PlaceholderMsg';
 // import RemoveFromPortfolio from '../../assets/removeFromPortfolio.svg';
 // import RemoveFromWatchlist from '../../assets/removeFromWatchlist.svg';
 
@@ -61,9 +62,38 @@ const CoinName = styled.div
 const CoinInfoButton = styled.img
 `
     height: 40px;
-    cursor: pointer;
+    cursor: ${props => props.authenticated ? "pointer" : "default"};
+    opacity: ${props => props.authenticated ? "1" : props.theme.buttonHoverOpacity};
     &:hover {
         opacity: ${props => props.theme.buttonHoverOpacity};
+    }
+`;
+
+const NotAuthenticatedPopover = styled.div
+`
+    background: ${props => props.theme.white};
+    color: ${props => props.theme.black};
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border-radius: 20px;
+    transform: translateX(-50%);
+    border: 1px solid ${props => props.theme.lightGreen};
+    display: none;
+    padding: 15px;
+    ${CoinInfoButton}:hover+&, &:hover {
+        display: inline-block;
+    }
+`
+
+const ToAuthLink = styled(Link)
+`
+    font-weight: bold;
+    color: ${props => props.theme.green};
+    text-decoration: none;
+    &:hover{
+        color: ${props => props.theme.lightGreen};
+        text-decoration: none;
     }
 `
 
@@ -99,13 +129,13 @@ const CoinInfo = props => {
 
     const currentPath = useLocation().pathname;
 
+    const authContext = useContext(AuthContext);
+
     const coinInfoContext = useContext(CoinInfoContext);
 
     const bootstrapProps = props.bootstrapProps || "offset-3 col-6";
 
     const { setError } = props;
-
-
 
     const [coinInfo, setCoinInfo] = useState(null);
 
@@ -165,9 +195,29 @@ const CoinInfo = props => {
                 <CoinName>
                     Dow Jones Industrial Average
                 </CoinName>
-                <div style={{marginLeft: "auto"}}>
-                    <CoinInfoButton src={AddToPortfolio} />
-                    <CoinInfoButton src={AddToWatchlist} />
+                <div style={{marginLeft: "auto", display: "flex"}}>
+                    <div style={{position: "relative"}}>
+                    <CoinInfoButton authenticated={authContext} src={AddToPortfolio} />
+                    <NotAuthenticatedPopover>
+                        <ToAuthLink to={ROUTES.CREATE_ACCOUNT}>
+                            Make an account 
+                        </ToAuthLink>or 
+                        <ToAuthLink to={ROUTES.SIGN_IN}>
+                            sign in 
+                        </ToAuthLink>to add this coin to your watchlist!
+                    </NotAuthenticatedPopover>
+                    </div>
+                    <div style={{position: "relative"}}>
+                    <CoinInfoButton authenticated={authContext} src={AddToWatchlist} />
+                    <NotAuthenticatedPopover>
+                        <ToAuthLink to={ROUTES.CREATE_ACCOUNT}>
+                            Make an account 
+                        </ToAuthLink>or 
+                        <ToAuthLink to={ROUTES.SIGN_IN}>
+                            sign in 
+                        </ToAuthLink>to add this coin to your watchlist!
+                    </NotAuthenticatedPopover>
+                    </div>
                 </div>
             </CoinInfoTopRow>
             <img style={{maxWidth: "100%", margin: "10px 0"}}src={PlaceholderChart} alt="" />

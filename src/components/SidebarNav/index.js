@@ -75,7 +75,7 @@ const SidebarNav = props => {
                 </StyledNavLink>
                 :
                 <StyledNavLink 
-                    to={ROUTES.AUTHENTICATE} 
+                    to={ROUTES.SIGN_IN}
                     activeStyle={sidebarActiveStyle} 
                     style={{marginTop: "auto"}}>
                     <NavEl src={SignInIcon} />

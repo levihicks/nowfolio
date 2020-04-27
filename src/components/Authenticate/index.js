@@ -5,7 +5,8 @@ import FormSubmit from '../UI/FormSubmit';
 import { AuthContext } from '../../session';
 import Spinner from '../UI/Spinner';
 import * as ROUTES from '../../constants/routes';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
+import { compose } from 'recompose';
 import { 
     doCreateUserWithEmailAndPassword,
     doSignInWithEmailAndPassword 
@@ -58,8 +59,8 @@ const LinkButton = styled.button
 `;
 
 const Authenticate = props => {
-
-    const [loggingIn, setLoggingIn] = useState(true);
+    const currentPath = useLocation().pathname;
+    const [loggingIn, setLoggingIn] = useState(currentPath === ROUTES.SIGN_IN);
     const [emailInput, setEmailInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
     const [loading, setLoading] = useState(false);
@@ -67,7 +68,7 @@ const Authenticate = props => {
 
     const toggleAuthenticateMode = (event) => {
         event.preventDefault();
-        setLoggingIn(!loggingIn);
+        props.history.push(loggingIn ? ROUTES.CREATE_ACCOUNT : ROUTES.SIGN_IN);
     }
 
     const promptText = loggingIn ? (

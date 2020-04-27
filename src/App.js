@@ -34,7 +34,8 @@ const App = props => {
           <Route path={ROUTES.COMPARE} component={Compare} />
           <Route path={ROUTES.ACCOUNT} component={Account} />
           <Route path={ROUTES.STOCK_INFO} component={CoinInfo} />
-          <Route path={ROUTES.AUTHENTICATE} component={Authenticate} />
+          <Route path={ROUTES.SIGN_IN} component={Authenticate} />
+          <Route path={ROUTES.CREATE_ACCOUNT} component={Authenticate} />
         </div>        
       </AppContainer>
       </BrowserRouter>
