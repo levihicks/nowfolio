@@ -10,8 +10,9 @@ const StyledBackdrop = styled.div
     left: 0;
     height: 100vh;
     width: 100vw;
-    background: ${props => props.theme.black};
-    opacity: .5;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 1;
+    backdrop-filter: blur(7px);
 `
 
 const Backdrop = props => (

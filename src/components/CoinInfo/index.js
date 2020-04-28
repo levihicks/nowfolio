@@ -1,6 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import {withRouter, useLocation, Link} from 'react-router-dom';
+import {withRouter, useLocation, Link, useParams} from 'react-router-dom';
 import {compose} from 'recompose';
 import * as ROUTES from '../../constants/routes';
 import {CoinInfoContext} from '../../contexts/CoinInfoContext';
@@ -10,12 +11,15 @@ import BackButtonIcon from '../../assets/back.svg';
 import AddToPortfolio from '../../assets/addToPortfolio.svg';
 import AddToWatchlist from '../../assets/addToWatchlist.svg';
 import withErrorModal from '../../hoc/withErrorModal';
+import Modal from '../UI/Modal';
 import Spinner from '../UI/Spinner';
 import { coinbaseAxios } from '../../axios';
 import {AuthContext} from '../../session';
-// import PlaceholderMsg from '../UI/PlaceholderMsg';
-// import RemoveFromPortfolio from '../../assets/removeFromPortfolio.svg';
-// import RemoveFromWatchlist from '../../assets/removeFromWatchlist.svg';
+import * as actions from '../../store/actions';
+import AddToPortfolioForm from './AddToPortfolioForm';
+
+import RemoveFromPortfolio from '../../assets/removeFromPortfolio.svg';
+import RemoveFromWatchlist from '../../assets/removeFromWatchlist.svg';
 
 
 const StyledCoinInfo = styled.div
@@ -123,24 +127,32 @@ const BackButton = styled.img
     }
 `;
 
-
-
 const CoinInfo = props => {
+
+    const dispatch = useDispatch();
+    const userCoins = useSelector( state => state.userCoins.userCoins );
 
     const currentPath = useLocation().pathname;
 
     const authContext = useContext(AuthContext);
 
     const coinInfoContext = useContext(CoinInfoContext);
+    let { setNewCoin } = coinInfoContext;
 
     const bootstrapProps = props.bootstrapProps || "offset-3 col-6";
 
     const { setError } = props;
 
     const [coinInfo, setCoinInfo] = useState(null);
+    const [addingToPortfolio, setAddingToPortfolio] = useState(false);
+    const [inPortfolio, setInPortfolio] = useState(false);
+    const [inWatchlist, setInWatchlist] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const params = useParams();
 
-    const fetchCoinInfo = () => {
-        if (coinInfoContext.currentCoin)
+    const fetchCoinInfo = useCallback(() => {
+        if (coinInfoContext.currentCoin) {
+            setLoading(true);
             coinbaseAxios.get(`/products/${coinInfoContext.currentCoin.tag
                 +"-"+coinInfoContext.currentCoin.quoteCurrency}/stats`)
                 .then(res => {
@@ -154,33 +166,80 @@ const CoinInfo = props => {
                         0 : 
                         ((res.data.last - res.data.open) / res.data.open * 100).toFixed(2)
                     });
-
+                    setLoading(false);
                 })
-                .catch(err => console.log(err.message));
-    }
+                .catch(err => {
+                    setLoading(false); 
+                    setError(err);
+                });
 
-    //useEffect(fetchCoinInfo, []);
+        }
+    }, [coinInfoContext.currentCoin, setError]);
 
     useEffect(() => {
-        if(coinInfoContext.currentCoin)
+        setInPortfolio(false);
+        setInWatchlist(false);
+        if(coinInfoContext.currentCoin){
             fetchCoinInfo();
-        
-    }, [coinInfoContext.currentCoin]);
+            const coinInUserCoins = userCoins.filter(c => 
+                c.tag === coinInfoContext.currentCoin.tag &&
+                c.quoteCurrency === coinInfoContext.currentCoin.quoteCurrency
+            )[0];
+            if(coinInUserCoins) {
+                if(coinInUserCoins.quantity)
+                    setInPortfolio(true);
+                else
+                    setInWatchlist(true);
+            }
+        }
+    }, [coinInfoContext.currentCoin, fetchCoinInfo, userCoins]);
 
     useEffect(() => {
-        return () => {coinInfoContext.setNewCoin(null)};
-    }, [])
+        return () => {setNewCoin(null);};
+    }, [setNewCoin])
+
+    useEffect(() => {
+        if(!coinInfoContext.currentCoin && params.id)
+            coinInfoContext.setNewCoin(params.id);
+    })
+    
 
     let content = <Spinner />;
 
-    if (!coinInfoContext.currentCoin)
-        content = <React.Fragment></React.Fragment>
+    if (!coinInfoContext.currentCoin && !params.id && !loading)
+        content = <React.Fragment></React.Fragment>;
 
-    if (coinInfo && coinInfoContext.currentCoin)
+    const uid = authContext && authContext.uid;
+    const handleWatchlistAdd = () => {
+        const newCoinToAdd = {
+            ...coinInfoContext.currentCoin
+        }
+        dispatch(actions.addUserCoin(newCoinToAdd, uid));
+    }
+    const handlePortfolioAdd = () => {
+        setAddingToPortfolio(true);
+    }
+    const handleUserCoinRemove = () => {
+        const coinToRemove = {
+            ...coinInfoContext.currentCoin
+        };
+        dispatch(actions.removeUserCoin(coinToRemove, uid));
+    }
+    
+    if (coinInfo && coinInfoContext.currentCoin && !loading) {
      content = (
         <React.Fragment>
             {
-                currentPath === ROUTES.STOCK_INFO && 
+                addingToPortfolio && 
+                <Modal hide={()=>setAddingToPortfolio(false)}>
+                    <AddToPortfolioForm 
+                        currentCoin={coinInfoContext.currentCoin} 
+                        submitted={()=>setAddingToPortfolio(false)}/>
+                </Modal>
+            }
+            {
+                (currentPath === `${ROUTES.STOCK_INFO}/${params.id}`)
+                && 
                 <BackButton 
                     src={BackButtonIcon}
                     onClick={()=>props.history.push("/search")}/>
@@ -193,30 +252,42 @@ const CoinInfo = props => {
             </CoinInfoTopRow>
             <CoinInfoTopRow>
                 <CoinName>
-                    Dow Jones Industrial Average
+                    {coinInfoContext.currentCoin.name}
                 </CoinName>
                 <div style={{marginLeft: "auto", display: "flex"}}>
                     <div style={{position: "relative"}}>
-                    <CoinInfoButton authenticated={authContext} src={AddToPortfolio} />
-                    <NotAuthenticatedPopover>
-                        <ToAuthLink to={ROUTES.CREATE_ACCOUNT}>
-                            Make an account 
-                        </ToAuthLink>or 
-                        <ToAuthLink to={ROUTES.SIGN_IN}>
-                            sign in 
-                        </ToAuthLink>to add this coin to your watchlist!
-                    </NotAuthenticatedPopover>
+                    <CoinInfoButton 
+                        authenticated={authContext} 
+                        src={inPortfolio ? RemoveFromPortfolio : AddToPortfolio} 
+                        onClick={inPortfolio ? handleUserCoinRemove : handlePortfolioAdd}/>
+                    { 
+                        !authContext && 
+                        <NotAuthenticatedPopover>
+                            <ToAuthLink to={ROUTES.CREATE_ACCOUNT}>
+                                Make an account 
+                            </ToAuthLink> or
+                            <ToAuthLink to={ROUTES.SIGN_IN}>
+                                sign in 
+                            </ToAuthLink>to add this coin to your portfolio!
+                        </NotAuthenticatedPopover>
+                    }
                     </div>
                     <div style={{position: "relative"}}>
-                    <CoinInfoButton authenticated={authContext} src={AddToWatchlist} />
-                    <NotAuthenticatedPopover>
-                        <ToAuthLink to={ROUTES.CREATE_ACCOUNT}>
-                            Make an account 
-                        </ToAuthLink>or 
-                        <ToAuthLink to={ROUTES.SIGN_IN}>
-                            sign in 
-                        </ToAuthLink>to add this coin to your watchlist!
-                    </NotAuthenticatedPopover>
+                    <CoinInfoButton 
+                        authenticated={authContext} 
+                        src={inWatchlist ? RemoveFromWatchlist : AddToWatchlist} 
+                        onClick={inWatchlist ? handleUserCoinRemove : handleWatchlistAdd}/>
+                    { 
+                        !authContext && 
+                        <NotAuthenticatedPopover>
+                            <ToAuthLink to={ROUTES.CREATE_ACCOUNT}>
+                                Make an account 
+                            </ToAuthLink> or  
+                            <ToAuthLink to={ROUTES.SIGN_IN}>
+                                sign in 
+                            </ToAuthLink>to add this coin to your watchlist!
+                        </NotAuthenticatedPopover>
+                    }
                     </div>
                 </div>
             </CoinInfoTopRow>
@@ -231,7 +302,7 @@ const CoinInfo = props => {
             </CoinInfoTable>
         </React.Fragment>
     )
-
+    }
     
 
     return (

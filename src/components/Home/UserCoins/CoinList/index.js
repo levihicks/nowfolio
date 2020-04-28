@@ -1,12 +1,16 @@
-import React, {useState, useContext, useEffect} from 'react';
-import styled from 'styled-components';
+import React, {useState, useContext, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import CoinListItem from './CoinListItem';
 import {CoinInfoContext} from '../../../../contexts/CoinInfoContext';
 import PlaceholderMsg from '../../../UI/PlaceholderMsg';
+import Spinner from '../../../UI/Spinner';
+
 const CoinList = props => {
     const { coinList } = props;
 
     const coinInfoContext = useContext(CoinInfoContext);
+
+    const loading = useSelector( state => state.userCoins.loading );
 
     const [hasOptionsActive, setHasOptionsActive] = useState(null);
 
@@ -15,7 +19,7 @@ const CoinList = props => {
         return (
             <CoinListItem 
                 {...ts}
-                key={ts.id} 
+                key={`${ts.tag}-${ts.quoteCurrency}`} 
                 
                 hasOptionsActive={hasOptionsActive}
                 openOptions={ id => setHasOptionsActive(id) }  />
@@ -25,29 +29,23 @@ const CoinList = props => {
             No coins, add some to see them here!
     </PlaceholderMsg>;
 
-    
-
-    const setFirstItemActive = () => {
+    const setFirstItemActive = useCallback(() => {
         if (coinList.length > 0) {
             const {tag, quoteCurrency} = listContent[0].props;
             coinInfoContext.setNewCoin(tag+"-"+quoteCurrency);
         }
-    }
+    }, [coinInfoContext, coinList.length, listContent]);
 
-    if(!coinInfoContext.currentCoin){
-        
-        setFirstItemActive();
-    }
-
-    useEffect(()=>{
-        if(coinInfoContext.currentCoin){
+    useEffect(() => {
+        if(!coinInfoContext.currentCoin)
             setFirstItemActive();
-        }
-    }, []);
-
+        if(coinList.length === 0)
+            coinInfoContext.setNewCoin(null);
+    }, [coinInfoContext, coinList.length, setFirstItemActive])
+    
     return (
         <div style={{width: "100%", flexGrow: "1", overflow: "auto"}}>
-            {listContent}
+            {loading ? <Spinner /> : listContent}
         </div>
     );
 }

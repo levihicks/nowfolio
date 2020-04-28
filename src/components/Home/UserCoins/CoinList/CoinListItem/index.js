@@ -49,12 +49,14 @@ const Popover = styled.div
     
 `;
 
-const CoinListItem = ({name, shares, tag, price, delta, quoteCurrency, id, hasOptionsActive, openOptions }) => {
+const CoinListItem = ({name, quantity, tag, price, quoteCurrency, hasOptionsActive, openOptions }) => {
+
+    const id=`${tag}-${quoteCurrency}`;
 
     const coinInfoContext = useContext(CoinInfoContext);
 
     const setCoinInfo = () => {
-        coinInfoContext.setNewCoin(tag+"-"+quoteCurrency);
+        coinInfoContext.setNewCoin(id);
     };
 
     const toggleOptions = () => {
@@ -64,7 +66,6 @@ const CoinListItem = ({name, shares, tag, price, delta, quoteCurrency, id, hasOp
             openOptions(id);
     };
 
-
     return (
         <StyledCoinListItem>
             <CoinListItemEl 
@@ -72,16 +73,18 @@ const CoinListItem = ({name, shares, tag, price, delta, quoteCurrency, id, hasOp
                 style={{marginRight: "auto", 
                     cursor: "pointer"}}
                 onClick={setCoinInfo}>
-                {id} {shares && `(${shares})`}
+                {id} {quantity && `(${quantity})`}
             </CoinListItemEl>
             <CoinListItemEl>
                 {price}
             </CoinListItemEl>
+            {/*
             <CoinListItemEl 
                 style={{fontSize: ".75rem", 
                     color: delta[0] === "-" ? "#A82C33" : "#2BA84A"}}>
                 {delta}
             </CoinListItemEl>
+            */}
             <CoinListItemEl>
                 <img height="30" 
                     alt="" 

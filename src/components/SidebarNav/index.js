@@ -42,7 +42,6 @@ const StyledNavLink = styled(NavLink)
 const SidebarNav = props => {
     const sidebarActiveStyle = {background: "#2BA84A"};
     const authContext = useContext(AuthContext);
-    // console.log(authContext.uid);
     return (
         <StyledSidebarNav className="col-sm-1">
             

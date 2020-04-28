@@ -6,7 +6,6 @@ import { AuthContext } from '../../session';
 import Spinner from '../UI/Spinner';
 import * as ROUTES from '../../constants/routes';
 import { Redirect, useLocation } from 'react-router-dom';
-import { compose } from 'recompose';
 import { 
     doCreateUserWithEmailAndPassword,
     doSignInWithEmailAndPassword 
@@ -60,7 +59,7 @@ const LinkButton = styled.button
 
 const Authenticate = props => {
     const currentPath = useLocation().pathname;
-    const [loggingIn, setLoggingIn] = useState(currentPath === ROUTES.SIGN_IN);
+    const loggingIn = useState(currentPath === ROUTES.SIGN_IN)[0];
     const [emailInput, setEmailInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
     const [loading, setLoading] = useState(false);

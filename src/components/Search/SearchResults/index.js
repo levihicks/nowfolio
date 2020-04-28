@@ -54,8 +54,9 @@ const SearchResult = withRouter(props => {
     const coinInfoContext = useContext(CoinInfoContext);
 
     const clickHandler = () => {
-        coinInfoContext.setNewCoin(coin.tag+"-"+coin.quoteCurrency);
-        props.history.push(ROUTES.STOCK_INFO);
+        const activeCoin = coin.tag+"-"+coin.quoteCurrency;
+        coinInfoContext.setNewCoin(activeCoin);
+        props.history.push(`${ROUTES.STOCK_INFO}/${activeCoin}`);
     }
 
     return (

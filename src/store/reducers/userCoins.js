@@ -1,0 +1,85 @@
+import * as actionTypes from '../actions/actionTypes';
+import { updateObject } from '../../shared/utility';
+
+const initialState = {
+    error: null,
+    loading: false,
+    userCoins: []
+};
+
+const addUserCoinStart = (state, action) => {
+    return updateObject(state, {
+        loading: true, 
+        error: false
+    });
+};
+const addUserCoinSuccess = (state, action) => {
+    return updateObject(state, {
+        loading: false, 
+        userCoins: state.userCoins.concat(action.coin)
+    });
+};
+const addUserCoinFail = (state, action) => {
+    return updateObject(state, {
+        loading: false, 
+        error: action.error
+    });
+};
+
+const removeUserCoinStart = (state, action) => {
+    return updateObject(state, {
+        loading: true, 
+        error: false
+    });
+};
+const removeUserCoinSuccess = (state, action) => {
+    return updateObject(state, {
+        loading: false, 
+        userCoins: state.userCoins.filter(c => 
+            c.tag !== action.coin.tag ||
+            c.quoteCurrency !== action.coin.quoteCurrency
+        )
+    });
+};
+const removeUserCoinFail = (state, action) => {
+    return updateObject(state, {
+        loading: false, 
+        error: action.error
+    });
+};
+
+const fetchUserCoinsStart = (state, action) => {
+    return updateObject(state, {
+        loading: true, 
+        error: false
+    });
+};
+const fetchUserCoinsSuccess = (state, action) => {
+    return updateObject(state, {
+        loading: false, 
+        userCoins: action.userCoins
+    });
+};
+const fetchUserCoinsFail = (state, action) => {
+    return updateObject(state, {
+        loading: false,
+        error: action.error
+    });
+};
+
+const reducer = ( state = initialState, action ) => {
+    switch( action.type ) {
+        case actionTypes.ADD_USER_COIN_START: return addUserCoinStart( state, action );
+        case actionTypes.ADD_USER_COIN_SUCCESS: return addUserCoinSuccess( state, action );
+        case actionTypes.ADD_USER_COIN_FAIL: return addUserCoinFail( state, action );
+        case actionTypes.REMOVE_USER_COIN_START: return removeUserCoinStart( state, action );
+        case actionTypes.REMOVE_USER_COIN_SUCCESS: return removeUserCoinSuccess( state, action );
+        case actionTypes.REMOVE_USER_COIN_FAIL: return removeUserCoinFail( state, action );
+        case actionTypes.FETCH_USER_COINS_START: return fetchUserCoinsStart ( state, action );
+        case actionTypes.FETCH_USER_COINS_SUCCESS: return fetchUserCoinsSuccess ( state, action );
+        case actionTypes.FETCH_USER_COINS_FAIL: return fetchUserCoinsFail ( state, action );
+        default: return state;
+    }
+};
+
+export default reducer;

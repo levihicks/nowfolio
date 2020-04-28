@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import * as actions from './store/actions';
+import { useDispatch } from 'react-redux';
 import { compose } from 'recompose';
 import { BrowserRouter, Route } from 'react-router-dom';
 import styled from 'styled-components';
@@ -23,6 +25,10 @@ const AppContainer = styled.div`
 `;
 
 const App = props => {
+  const dispatch = useDispatch();
+  useEffect(()=>{
+      dispatch(actions.fetchUserCoins("123"));
+  }, [dispatch])
 
   return (
     <BrowserRouter>
@@ -33,7 +39,10 @@ const App = props => {
           <Route path={ROUTES.SEARCH} component={Search} />
           <Route path={ROUTES.COMPARE} component={Compare} />
           <Route path={ROUTES.ACCOUNT} component={Account} />
-          <Route path={ROUTES.STOCK_INFO} component={CoinInfo} />
+
+          <Route exact path={ROUTES.STOCK_INFO} component={CoinInfo} />
+          <Route path={ROUTES.STOCK_INFO_DETAILS} component={CoinInfo} />
+
           <Route path={ROUTES.SIGN_IN} component={Authenticate} />
           <Route path={ROUTES.CREATE_ACCOUNT} component={Authenticate} />
         </div>        

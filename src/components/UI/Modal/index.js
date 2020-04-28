@@ -9,8 +9,8 @@ const StyledModal = styled.div
     z-index: 100;
     background: ${props => props.theme.white};
     position: fixed;
-    height: 300px;
-    width: 300px;
+    min-height: 300px;
+    min-width: 300px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
