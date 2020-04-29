@@ -1,8 +1,12 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState,} from 'react';
+import {useDispatch} from 'react-redux';
 import styled from 'styled-components';
 import OptionsIcon from '../../../../../assets/listItemOptions.svg';
 import {CoinInfoContext} from '../../../../../contexts/CoinInfoContext';
-
+import * as actions from '../../../../../store/actions';
+import {AuthContext} from '../../../../../session';
+import Modal from '../../../../UI/Modal';
+import AddToPortfolioForm from '../../../../CoinInfo/AddToPortfolioForm';
 const StyledCoinListItem = styled.div
 `
     border-top: 1px solid ${props => props.theme.gray};
@@ -38,9 +42,6 @@ const Popover = styled.div
         width: 100%;
         text-align: left;
         padding: 3px 0;
-        &:first-child {
-            border-bottom: 1px solid ${props => props.theme.gray};
-        }
         &:hover {
             color: ${props => props.theme.lightGreen};
         }
@@ -49,14 +50,20 @@ const Popover = styled.div
     
 `;
 
-const CoinListItem = ({name, quantity, tag, price, quoteCurrency, hasOptionsActive, openOptions }) => {
+const CoinListItem = ({name, quantity, tag, price, quoteCurrency, hasOptionsActive, openOptions, coinId }) => {
+
+    const dispatch = useDispatch();
 
     const id=`${tag}-${quoteCurrency}`;
 
     const coinInfoContext = useContext(CoinInfoContext);
 
+    const authContext = useContext(AuthContext);
+
+    const [editing, setEditing] = useState(false);
+
     const setCoinInfo = () => {
-        coinInfoContext.setNewCoin(id);
+        coinInfoContext.setNewCoin(coinId);
     };
 
     const toggleOptions = () => {
@@ -65,7 +72,6 @@ const CoinListItem = ({name, quantity, tag, price, quoteCurrency, hasOptionsActi
         else
             openOptions(id);
     };
-
     return (
         <StyledCoinListItem>
             <CoinListItemEl 
@@ -94,8 +100,28 @@ const CoinListItem = ({name, quantity, tag, price, quoteCurrency, hasOptionsActi
             </CoinListItemEl>
             {hasOptionsActive === id &&
             <Popover>
-                <button>Edit</button>
-                <button>Remove</button>
+                {
+                    editing && 
+                    <Modal hide={()=>setEditing(false)}>
+                        <AddToPortfolioForm 
+                            currentCoin={coinId}
+                            currentQuantity={quantity}
+                            currentPrice={price}
+                            submitted={()=>{
+                                setEditing(false);
+                                openOptions(null);
+                            }}/>
+                    </Modal>
+                }
+                {
+                    quantity && 
+                    <button onClick={()=>setEditing(true)}>Edit</button>
+                }
+                <button onClick={()=>
+                    dispatch(actions.removeUserCoin(coinId, authContext.uid))
+                }>
+                    Remove
+                </button>
             </Popover>
             }
         </StyledCoinListItem>

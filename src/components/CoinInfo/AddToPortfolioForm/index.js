@@ -20,20 +20,24 @@ const AddToPortfolioForm = props => {
     const dispatch = useDispatch();
 
     const authContext = useContext(AuthContext);
-    const { currentCoin, submitted } = props;
+    const { currentCoin, submitted, currentQuantity, currentPrice } = props;
 
     const uid = authContext && authContext.uid;
-
-    const [quantity, setQuantity] = useState("");
-    const [price, setPrice] = useState("");
+    const [quantity, setQuantity] = useState(currentQuantity || "");
+    const [price, setPrice] = useState(currentPrice || "");
 
     const handleSubmit = () => {
-        const newCoinToAdd = {
-            ...currentCoin,
-            quantity: quantity,
-            price: price
+        if (currentQuantity) { // editing
+            dispatch(actions.updateUserCoin(currentCoin, quantity, price, authContext.uid));
         }
-        dispatch(actions.addUserCoin(newCoinToAdd, uid));
+        else {
+            const newCoinToAdd = {
+                ...currentCoin,
+                quantity: quantity,
+                price: price
+            }
+            dispatch(actions.addUserCoin(newCoinToAdd, uid));
+        }
         submitted();
     }
 
@@ -51,7 +55,7 @@ const AddToPortfolioForm = props => {
                 value={price}
                 change={(event) => setPrice(event.target.value)} />
             <FormSubmit 
-                    val="Add To Portfolio" />
+                    val={currentQuantity ? "Edit" : "Add To Portfolio"} />
             </div>
         </StyledForm>
     )

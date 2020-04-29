@@ -66,8 +66,8 @@ const CoinName = styled.div
 const CoinInfoButton = styled.img
 `
     height: 40px;
-    cursor: ${props => props.authenticated ? "pointer" : "default"};
-    opacity: ${props => props.authenticated ? "1" : props.theme.buttonHoverOpacity};
+    cursor: ${props => props.disabled ? "default" : "pointer"};
+    opacity: ${props => props.disabled ? props.theme.buttonHoverOpacity : "1"};
     &:hover {
         opacity: ${props => props.theme.buttonHoverOpacity};
     }
@@ -187,9 +187,9 @@ const CoinInfo = props => {
             )[0];
             if(coinInUserCoins) {
                 if(coinInUserCoins.quantity)
-                    setInPortfolio(true);
+                    setInPortfolio(coinInUserCoins.coinId);
                 else
-                    setInWatchlist(true);
+                    setInWatchlist(coinInUserCoins.coinId);
             }
         }
     }, [coinInfoContext.currentCoin, fetchCoinInfo, userCoins]);
@@ -220,9 +220,7 @@ const CoinInfo = props => {
         setAddingToPortfolio(true);
     }
     const handleUserCoinRemove = () => {
-        const coinToRemove = {
-            ...coinInfoContext.currentCoin
-        };
+        let coinToRemove = inPortfolio || inWatchlist;
         dispatch(actions.removeUserCoin(coinToRemove, uid));
     }
     
@@ -257,7 +255,7 @@ const CoinInfo = props => {
                 <div style={{marginLeft: "auto", display: "flex"}}>
                     <div style={{position: "relative"}}>
                     <CoinInfoButton 
-                        authenticated={authContext} 
+                        disabled={!authContext || inWatchlist} 
                         src={inPortfolio ? RemoveFromPortfolio : AddToPortfolio} 
                         onClick={inPortfolio ? handleUserCoinRemove : handlePortfolioAdd}/>
                     { 
@@ -274,7 +272,7 @@ const CoinInfo = props => {
                     </div>
                     <div style={{position: "relative"}}>
                     <CoinInfoButton 
-                        authenticated={authContext} 
+                        disabled={!authContext || inPortfolio} 
                         src={inWatchlist ? RemoveFromWatchlist : AddToWatchlist} 
                         onClick={inWatchlist ? handleUserCoinRemove : handleWatchlistAdd}/>
                     { 

@@ -37,11 +37,14 @@ const CoinList = props => {
     }, [coinInfoContext, coinList.length, listContent]);
 
     useEffect(() => {
-        if(!coinInfoContext.currentCoin)
+        if(!coinInfoContext.currentCoin || 
+            coinList.filter(c => 
+                c.coinId===hasOptionsActive
+            ).length ===0 )
             setFirstItemActive();
         if(coinList.length === 0)
             coinInfoContext.setNewCoin(null);
-    }, [coinInfoContext, coinList.length, setFirstItemActive])
+    }, [coinInfoContext, coinList, setFirstItemActive, hasOptionsActive])
     
     return (
         <div style={{width: "100%", flexGrow: "1", overflow: "auto"}}>

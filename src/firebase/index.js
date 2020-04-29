@@ -1,5 +1,6 @@
 import * as firebase from 'firebase/app';
 import "firebase/auth";
+import "firebase/database";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDxha7T391hwE6akFz9mmHYn0V1HPvr9QQ",
@@ -14,6 +15,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+const db = firebase.database();
 
 export const doCreateUserWithEmailAndPassword = (email, password) =>
     auth.createUserWithEmailAndPassword(email, password);
@@ -31,3 +33,6 @@ export const authObserver = (success, fail) =>
         else
             fail();
     });
+
+export const userCoinsRef = uid => db.ref(`userCoins/${uid}`);
+export const userCoinRef = (uid, coinId) => db.ref(`userCoins/${uid}/${coinId}`);

@@ -1,8 +1,10 @@
-import React, { useState, } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect, useContext,  } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import * as actions from '../../../store/actions';
 import ViewOption from './ViewOption';
 import CoinList from './CoinList';
 import styled from 'styled-components';
+import { AuthContext } from '../../../session';
 
 const StyledUserCoins = styled.div
 `
@@ -27,24 +29,35 @@ const Total = styled.div
     margin-bottom: 20px;
 `;
 
-
 const UserCoins = props => {
     
-    const portfolio = [];
-    const watchlist = [];
-    let userCoins = useSelector(state => state.userCoins.userCoins);
-    
-    userCoins.forEach( c => {
-        (c.quantity ? portfolio : watchlist).push(c);
-    })
+    const [portfolio, setPortfolio] = useState([]);
+    const [watchlist, setWatchlist] = useState([]);
+    const userCoins = useSelector(state => state.userCoins.userCoins);
+     
+    const authContext = useContext(AuthContext);
+    const dispatch = useDispatch();
+    useEffect(()=>{dispatch(actions.fetchUserCoins(authContext && authContext.uid))}, [authContext, dispatch]);
+    useEffect( () => {
+        const newPortfolio = [];
+        const newWatchlist = [];
+        userCoins.forEach( c => {
+            (c.quantity ? newPortfolio : newWatchlist).push(c);
+        })
+        setPortfolio(newPortfolio);
+        setWatchlist(newWatchlist);
+    }, [userCoins])
+
     
     const [portfolioActive, setPortfolioActive] = useState(true);
+    
+    
     const toggleActive = () => setPortfolioActive(!portfolioActive);
 
-    const coinList = portfolioActive ? portfolio : watchlist;    
+      
     let total = 0;
     if (portfolioActive) {
-        total = coinList.reduce((t, s) => t + Number(s.quantity * s.price), 0);
+        total = portfolio.reduce((t, s) => t + Number(s.quantity * s.price), 0);
     }
     return (
         <StyledUserCoins 
@@ -58,7 +71,7 @@ const UserCoins = props => {
                 <ViewOption viewActive={!portfolioActive} 
                     click={portfolioActive && toggleActive} />
             </ViewOptions>
-            <CoinList coinList={coinList} />
+            <CoinList coinList={portfolioActive?portfolio:watchlist} />
             {
                 portfolioActive && 
                 <Total>
@@ -67,6 +80,6 @@ const UserCoins = props => {
             }
         </StyledUserCoins>
     );
-}
+};
 
 export default UserCoins;

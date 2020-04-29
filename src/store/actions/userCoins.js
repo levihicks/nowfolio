@@ -1,6 +1,6 @@
 import * as actionTypes from './actionTypes';
 
-export const addUserCoinStart = (coin) => {
+export const addUserCoinStart = () => {
     return { 
         type: actionTypes.ADD_USER_COIN_START
     }
@@ -25,15 +25,15 @@ export const addUserCoin = (coin, uid) => {
     }
 }
 
-export const removeUserCoinStart = (coin) => {
+export const removeUserCoinStart = () => {
     return { 
         type: actionTypes.REMOVE_USER_COIN_START
     }
 }
-export const removeUserCoinSuccess = (coin) => {
+export const removeUserCoinSuccess = (coinId) => {
     return { 
         type: actionTypes.REMOVE_USER_COIN_SUCCESS,
-        coin: coin
+        coinId: coinId
     }
 }
 export const removeUserCoinFail = (error) => {
@@ -42,10 +42,40 @@ export const removeUserCoinFail = (error) => {
         error: error
     }
 }
-export const removeUserCoin = (coin, uid) => {
+export const removeUserCoin = (coinId, uid) => {
     return { 
         type: actionTypes.REMOVE_USER_COIN,
-        coin: coin,
+        coinId: coinId,
+        uid: uid
+    }
+}
+
+
+export const updateUserCoinStart = () => {
+    return { 
+        type: actionTypes.UPDATE_USER_COIN_START
+    }
+}
+export const updateUserCoinSuccess = (coinId, newQuantity, newPrice) => {
+    return { 
+        type: actionTypes.UPDATE_USER_COIN_SUCCESS,
+        coinId: coinId,
+        newQuantity: newQuantity, 
+        newPrice: newPrice
+    }
+}
+export const updateUserCoinFail = (error) => {
+    return { 
+        type: actionTypes.UPDATE_USER_COIN_FAIL,
+        error: error
+    }
+}
+export const updateUserCoin = (coinId, newQuantity, newPrice, uid) => {
+    return { 
+        type: actionTypes.UPDATE_USER_COIN,
+        coinId: coinId,
+        newQuantity: newQuantity, 
+        newPrice: newPrice,
         uid: uid
     }
 }

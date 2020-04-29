@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
-import * as actions from './store/actions';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import { compose } from 'recompose';
 import { BrowserRouter, Route } from 'react-router-dom';
 import styled from 'styled-components';
@@ -25,11 +23,7 @@ const AppContainer = styled.div`
 `;
 
 const App = props => {
-  const dispatch = useDispatch();
-  useEffect(()=>{
-      dispatch(actions.fetchUserCoins("123"));
-  }, [dispatch])
-
+  
   return (
     <BrowserRouter>
       <AppContainer className="container-fluid">

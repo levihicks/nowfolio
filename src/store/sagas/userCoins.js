@@ -1,12 +1,15 @@
-import { put, delay } from 'redux-saga/effects';
+import { put, } from 'redux-saga/effects';
+import { userCoinsRef, userCoinRef } from '../../firebase';
 
 import * as actions from '../actions';
 
 export function* addUserCoinSaga(action) {
     yield put(actions.addUserCoinStart());
     try {
-        // side effect goes here
+        yield userCoinsRef(action.uid)
+            .push(action.coin)
         yield put(actions.addUserCoinSuccess(action.coin));
+        yield put(actions.fetchUserCoins(action.uid));
     } catch (error) {
         yield put(actions.addUserCoinFail(error));
     }
@@ -15,20 +18,49 @@ export function* addUserCoinSaga(action) {
 export function* removeUserCoinSaga(action) {
     yield put(actions.removeUserCoinStart());
     try {
-        // side effect goes here
-        yield put(actions.removeUserCoinSuccess(action.coin));
+        console.log(action.uid);
+        console.log(action.coinId);
+        
+        yield userCoinRef(action.uid, action.coinId).remove();
+        yield put(actions.removeUserCoinSuccess(action.coinId));
+        yield put(actions.fetchUserCoins(action.uid));
     } catch (error) {
         yield put(actions.removeUserCoinFail(error));
+    }
+}
+
+export function* updateUserCoinSaga(action) {
+    console.log(action.uid);
+    yield put(actions.updateUserCoinStart());
+    try {
+        yield userCoinRef(action.uid, action.coinId)
+            .update({
+                quantity: action.newQuantity,
+                price: action.newPrice
+            });
+        yield put(actions.updateUserCoinSuccess(action.coinId, action.newQuantity, action.newPrice));
+        yield put(actions.fetchUserCoins(action.uid));
+    } catch (error) {
+        yield put(actions.updateUserCoinFail(error));
     }
 }
 
 export function* fetchUserCoinsSaga(action) {
     yield put(actions.fetchUserCoinsStart());
     try {
-        // side effect goes here
-        yield delay(1000);
-        const userCoins = [];
-        yield put(actions.fetchUserCoinsSuccess(userCoins))
+        let fetchedCoins = [];
+
+        yield userCoinsRef(action.uid)
+            .once('value', snapshot => {
+                const userCoinsObj = snapshot.val();
+                if(userCoinsObj){
+                    fetchedCoins = Object.keys(userCoinsObj)
+                        .map(coinId => (
+                            {...userCoinsObj[coinId], coinId}
+                        ))
+                }
+            })
+        yield put(actions.fetchUserCoinsSuccess(fetchedCoins));
     } catch (error) {
         yield put(actions.fetchUserCoinsFail(error))
     }
