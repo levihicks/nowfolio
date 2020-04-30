@@ -46,8 +46,6 @@ const Popover = styled.div
             color: ${props => props.theme.lightGreen};
         }
     }
-
-    
 `;
 
 const CoinListItem = ({name, quantity, tag, price, quoteCurrency, hasOptionsActive, openOptions, coinId }) => {

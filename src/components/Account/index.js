@@ -1,17 +1,40 @@
 import React, { useContext } from 'react';
+import styled from 'styled-components';
 import {doSignOut} from '../../firebase';
 import {AuthContext} from '../../session';
 import * as ROUTES from '../../constants/routes';
 import { Redirect } from 'react-router-dom';
+import FormSubmit from '../UI/FormSubmit'
+
+const AccountPage = styled.div
+`
+    padding-top: 30px;
+`;
+
+const AccountPageHeader = styled.div
+`
+    font-size: 2rem;
+    color: ${props => props.theme.black};
+    font-weight: bold;
+    border-bottom: 2px solid ${props => props.theme.lightGreen};
+    margin-bottom: 20px;
+`
 
 const Account = () => {
 
     const authContext = useContext(AuthContext);
 
     let content = (
-        <div className="offset-2">
-            <button onClick={doSignOut}>Sign Out</button>
-        </div>
+        <AccountPage className="offset-2">
+            <AccountPageHeader>
+                Account
+            </AccountPageHeader>
+            <FormSubmit onClick={(event)=>{
+                    event.preventDefault();
+                    doSignOut();
+                }}
+                val="Sign Out" />
+        </AccountPage>
     );
 
     return (

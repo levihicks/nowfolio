@@ -33,7 +33,7 @@ const Search = props => {
     }
 
     return (
-        <SearchPage className="offset-2 col-8">
+        <SearchPage className="offset-md-2 col-md-8">
             {/* {error && <Modal hide={() => setError(null)}>{error.message}</Modal>} */}
             <Searchbar change={(inputVal) => changeHandler(inputVal)} value={searchInput}/>
             {searchResults && <SearchResults searchResults={searchResults} />}

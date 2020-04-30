@@ -24,8 +24,12 @@ import RemoveFromWatchlist from '../../assets/removeFromWatchlist.svg';
 
 const StyledCoinInfo = styled.div
 `
-    padding-top: 30px;
-    height: 100vh;
+    
+    min-width: 495px;
+    @media (min-width: 992px) {
+        min-height: 100vh;
+        padding-top: 30px;
+    }
 `;
 
 const CoinInfoTopRow = styled.div
@@ -139,7 +143,7 @@ const CoinInfo = props => {
     const coinInfoContext = useContext(CoinInfoContext);
     let { setNewCoin } = coinInfoContext;
 
-    const bootstrapProps = props.bootstrapProps || "offset-3 col-6";
+    const bootstrapProps = props.bootstrapProps || "offset-xs-0 offset-md-3 col-xs-10 col-md-6 ";
 
     const { setError } = props;
 

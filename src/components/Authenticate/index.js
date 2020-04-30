@@ -90,7 +90,7 @@ const Authenticate = props => {
     }
 
     const AuthForm = (
-        <AuthenticateForm onSubmit={handleSubmit} className="offset-4 col-4 my-auto">
+        <AuthenticateForm onSubmit={handleSubmit} className="offset-1 offset-md-4 col-10 col-md-4 my-auto">
                 <AuthenticateFormHeader>
                     { loggingIn ? "Login" : "Sign Up" }
                 </AuthenticateFormHeader>

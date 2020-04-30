@@ -13,8 +13,8 @@ const Home = () => {
 
     return (
         <React.Fragment>
-            <StyledHomeEl as={UserCoins} bootstrapProps="offset-1 col-5" />
-            <CoinInfo bootstrapProps="col-5"/>
+            <StyledHomeEl as={UserCoins} bootstrapProps="offset-1 col-10 col-lg-5" />
+            <CoinInfo bootstrapProps="mx-auto col-10 col-lg-5 order-first order-lg-last"/>
         </React.Fragment>
     )
 };

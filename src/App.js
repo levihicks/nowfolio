@@ -20,6 +20,9 @@ import { withAuthProvider } from './session';
 
 const AppContainer = styled.div`
   background: ${props=>props.theme.white};
+  @media (max-width: 767px) {
+    margin-top: 80px;
+  }
 `;
 
 const App = props => {
