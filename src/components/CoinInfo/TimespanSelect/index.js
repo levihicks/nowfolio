@@ -48,14 +48,15 @@ const TimespanOptionEl = styled.button
 
 const TimespanSelect = props => {
 
-    const timespan = useState("Past Week")[0];
+    const timespans = ["Past Day", "Past Week", "Past Month"];
+    const {selectedTimespan, setSelectedTimespan} = props;
     const [optionsDisplayed, setOptionsDisplayed] = useState(false);
 
     return (
         <StyledTimespanSelect>
             <StyledTimespanSelectButton 
                 onClick={()=>setOptionsDisplayed(!optionsDisplayed)}>
-                {timespan} 
+                {selectedTimespan} 
                 <img 
                     src={DropdownIcon} 
                     style={{transform: optionsDisplayed ? "rotate(180deg)" : "none",
@@ -64,12 +65,16 @@ const TimespanSelect = props => {
             </StyledTimespanSelectButton>
             { optionsDisplayed && (
                 <TimespanOptions>
-                    <TimespanOptionEl>
-                        Past Month
-                    </TimespanOptionEl>
-                    <TimespanOptionEl>
-                        Past Year
-                    </TimespanOptionEl>
+                    {timespans.map(t => {
+                        if(t !== selectedTimespan)
+                            return (
+                                <TimespanOptionEl onClick={()=>setSelectedTimespan(t)}
+                                key={t}>
+                                    {t}
+                                </TimespanOptionEl>
+                            )
+                        
+                    })}
                 </TimespanOptions>
             )}
         </StyledTimespanSelect>

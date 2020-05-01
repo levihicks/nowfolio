@@ -17,6 +17,7 @@ import { coinbaseAxios } from '../../axios';
 import {AuthContext} from '../../session';
 import * as actions from '../../store/actions';
 import AddToPortfolioForm from './AddToPortfolioForm';
+import CoinChart from './CoinChart';
 
 import RemoveFromPortfolio from '../../assets/removeFromPortfolio.svg';
 import RemoveFromWatchlist from '../../assets/removeFromWatchlist.svg';
@@ -152,6 +153,7 @@ const CoinInfo = props => {
     const [inPortfolio, setInPortfolio] = useState(false);
     const [inWatchlist, setInWatchlist] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [currentTimespan, setCurrentTimespan] = useState("Past Day");
     const params = useParams();
 
     const fetchCoinInfo = useCallback(() => {
@@ -250,7 +252,9 @@ const CoinInfo = props => {
                 <CoinTag>{coinInfoContext.currentCoin.tag}</CoinTag>
                 <CoinPrice>{`${coinInfo.last} ${coinInfoContext.currentCoin.quoteCurrency}`}</CoinPrice>
                 <CoinDelta delta={coinInfo.delta}>{coinInfo.delta}%</CoinDelta>
-                <TimespanSelect />
+                <TimespanSelect 
+                    selectedTimespan={currentTimespan}
+                    setSelectedTimespan={setCurrentTimespan} />
             </CoinInfoTopRow>
             <CoinInfoTopRow>
                 <CoinName>
@@ -293,7 +297,9 @@ const CoinInfo = props => {
                     </div>
                 </div>
             </CoinInfoTopRow>
-            <img style={{maxWidth: "100%", margin: "10px 0"}}src={PlaceholderChart} alt="" />
+            <CoinChart currentCoin={coinInfoContext.currentCoin.tag
+                +"-"+coinInfoContext.currentCoin.quoteCurrency}
+                timespan={currentTimespan} />
             <CoinInfoTable>
                 <CoinInfoTableEl>Open: {coinInfo.open}</CoinInfoTableEl>
                 <CoinInfoTableEl>Last: {coinInfo.last}</CoinInfoTableEl>
