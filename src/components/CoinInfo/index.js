@@ -6,7 +6,7 @@ import {compose} from 'recompose';
 import * as ROUTES from '../../constants/routes';
 import {CoinInfoContext} from '../../contexts/CoinInfoContext';
 import TimespanSelect from './TimespanSelect';
-import PlaceholderChart from '../../assets/placeholderChart.svg';
+//import PlaceholderChart from '../../assets/placeholderChart.svg';
 import BackButtonIcon from '../../assets/back.svg';
 import AddToPortfolio from '../../assets/addToPortfolio.svg';
 import AddToWatchlist from '../../assets/addToWatchlist.svg';
@@ -25,11 +25,10 @@ import RemoveFromWatchlist from '../../assets/removeFromWatchlist.svg';
 
 const StyledCoinInfo = styled.div
 `
-    
     min-width: 495px;
+    padding-top: 30px;
     @media (min-width: 992px) {
         min-height: 100vh;
-        padding-top: 30px;
     }
 `;
 

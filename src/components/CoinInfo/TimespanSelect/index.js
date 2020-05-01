@@ -73,6 +73,8 @@ const TimespanSelect = props => {
                                     {t}
                                 </TimespanOptionEl>
                             )
+                        else
+                            return null;
                         
                     })}
                 </TimespanOptions>

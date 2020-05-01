@@ -18,9 +18,6 @@ export function* addUserCoinSaga(action) {
 export function* removeUserCoinSaga(action) {
     yield put(actions.removeUserCoinStart());
     try {
-        console.log(action.uid);
-        console.log(action.coinId);
-        
         yield userCoinRef(action.uid, action.coinId).remove();
         yield put(actions.removeUserCoinSuccess(action.coinId));
         yield put(actions.fetchUserCoins(action.uid));
@@ -30,7 +27,6 @@ export function* removeUserCoinSaga(action) {
 }
 
 export function* updateUserCoinSaga(action) {
-    console.log(action.uid);
     yield put(actions.updateUserCoinStart());
     try {
         yield userCoinRef(action.uid, action.coinId)
