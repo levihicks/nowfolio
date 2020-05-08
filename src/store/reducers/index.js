@@ -1,5 +1,3 @@
-import userCoinsReducer from './userCoins';
+import userCoinsReducer from "./userCoins";
 
-export {
-    userCoinsReducer
-};
+export { userCoinsReducer };

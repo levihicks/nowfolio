@@ -1,3 +1,3 @@
-import { withTheme } from './context'
+import { withTheme } from "./context";
 
 export { withTheme };

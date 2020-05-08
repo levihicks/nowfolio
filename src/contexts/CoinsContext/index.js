@@ -1,3 +1,5 @@
-import withCoinsContextProvider, { CoinsContext } from './withCoinsContextProvider';
+import withCoinsContextProvider, {
+  CoinsContext,
+} from "./withCoinsContextProvider";
 
-export { withCoinsContextProvider, CoinsContext }
+export { withCoinsContextProvider, CoinsContext };
