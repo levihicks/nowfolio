@@ -98,10 +98,13 @@ const NotAuthenticatedPopover = styled.div`
 const ToAuthLink = styled(Link)`
   font-weight: bold;
   color: ${(props) => props.theme.green};
-  text-decoration: none;
+  padding: 0 0.25rem;
   &:hover {
     color: ${(props) => props.theme.lightGreen};
     text-decoration: none;
+  }
+  &:first-child {
+    padding-left: 0;
   }
 `;
 
@@ -225,17 +228,13 @@ const CoinInfo = (props) => {
 
   const uid = authContext && authContext.uid;
   const handleWatchlistAdd = () => {
-    if (authContext) {
-      const newCoinToAdd = {
-        ...coinInfoContext.currentCoin,
-      };
-      dispatch(actions.addUserCoin(newCoinToAdd, uid));
-    }
+    const newCoinToAdd = {
+      ...coinInfoContext.currentCoin,
+    };
+    dispatch(actions.addUserCoin(newCoinToAdd, uid));
   };
   const handlePortfolioAdd = () => {
-    if (authContext) {
-      setAddingToPortfolio(true);
-    }
+    setAddingToPortfolio(true);
   };
   const handleUserCoinRemove = () => {
     let coinToRemove = inPortfolio || inWatchlist;
@@ -276,16 +275,20 @@ const CoinInfo = (props) => {
                 disabled={!authContext || inWatchlist}
                 src={inPortfolio ? RemoveFromPortfolio : AddToPortfolio}
                 onClick={
-                  inPortfolio ? handleUserCoinRemove : handlePortfolioAdd
+                  authContext && !inWatchlist
+                    ? inPortfolio
+                      ? handleUserCoinRemove
+                      : handlePortfolioAdd
+                    : null
                 }
               />
               {!authContext && (
                 <NotAuthenticatedPopover>
                   <ToAuthLink to={ROUTES.CREATE_ACCOUNT}>
                     Make an account
-                  </ToAuthLink>{" "}
+                  </ToAuthLink>
                   or
-                  <ToAuthLink to={ROUTES.SIGN_IN}>sign in</ToAuthLink>to add
+                  <ToAuthLink to={ROUTES.SIGN_IN}>sign in</ToAuthLink> to add
                   this coin to your portfolio!
                 </NotAuthenticatedPopover>
               )}
@@ -295,16 +298,20 @@ const CoinInfo = (props) => {
                 disabled={!authContext || inPortfolio}
                 src={inWatchlist ? RemoveFromWatchlist : AddToWatchlist}
                 onClick={
-                  inWatchlist ? handleUserCoinRemove : handleWatchlistAdd
+                  authContext && !inPortfolio
+                    ? inWatchlist
+                      ? handleUserCoinRemove
+                      : handleWatchlistAdd
+                    : null
                 }
               />
               {!authContext && (
                 <NotAuthenticatedPopover>
                   <ToAuthLink to={ROUTES.CREATE_ACCOUNT}>
                     Make an account
-                  </ToAuthLink>{" "}
+                  </ToAuthLink>
                   or
-                  <ToAuthLink to={ROUTES.SIGN_IN}>sign in</ToAuthLink>to add
+                  <ToAuthLink to={ROUTES.SIGN_IN}>sign in </ToAuthLink> to add
                   this coin to your watchlist!
                 </NotAuthenticatedPopover>
               )}

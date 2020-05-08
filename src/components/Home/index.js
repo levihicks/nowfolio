@@ -6,6 +6,9 @@ import CoinInfo from "../CoinInfo";
 const StyledHomeEl = styled.div`
   padding-top: 30px;
   height: 100vh;
+  @media (max-width: 767px) {
+    height: auto;
+  }
 `;
 
 const Home = () => {

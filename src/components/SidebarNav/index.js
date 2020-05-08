@@ -25,16 +25,25 @@ const StyledSidebarNav = styled.div`
   z-index: 1000;
   @media (max-width: 767px) {
     top: 0;
-    height: ${(props) => (props.menuActive ? "100vh" : "80px")};
+    height: ${(props) => (props.menuActive ? "100vh" : "50px")};
+  }
+`;
+
+const StyledSidebarNavHeader = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 80px;
+  padding-left: 20px;
+  @media (max-width: 767px) {
+    min-height: 50px;
   }
 `;
 
 const NavEl = styled.img`
   max-width: 50%;
   cursor: pointer;
-  @media (max-width: 767px) {
-    max-height: 40px;
-  }
+  max-height: 40px;
 `;
 
 const StyledNavLink = styled(NavLink)`
@@ -52,7 +61,7 @@ const StyledNavLink = styled(NavLink)`
 `;
 
 const StyledHamburgerIcon = styled.img`
-  height: 40px;
+  height: 25px;
   display: inline;
   margin-right: auto;
 `;
@@ -72,11 +81,12 @@ const NavLinks = styled.div`
 
 const StyledNowfolioIcon = styled.img`
   max-width: 50%;
+  max-height: 60px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   @media (max-width: 767px) {
-    height: 40px;
+    height: 30px;
   }
 `;
 
@@ -96,15 +106,7 @@ const SidebarNav = (props) => {
   const [menuActive, setMenuActive] = useState(false);
   return (
     <StyledSidebarNav className="col-md-1" menuActive={menuActive}>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          width: "100%",
-          minHeight: "80px",
-          padding: "20px",
-        }}
-      >
+      <StyledSidebarNavHeader>
         <StyledHamburgerIcon
           src={HamburgerIcon}
           className="d-md-none"
@@ -113,7 +115,7 @@ const SidebarNav = (props) => {
           }}
         />
         <StyledNowfolioIcon src={NowfolioIcon} />
-      </div>
+      </StyledSidebarNavHeader>
       <NavLinks menuDisplayed={menuActive}>
         <StyledNavLink
           exact

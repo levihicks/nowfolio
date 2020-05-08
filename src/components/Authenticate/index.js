@@ -14,14 +14,30 @@ import {
   doSignInWithEmailAndPassword,
 } from "../../firebase";
 
+const AuthenticateFormContainer = styled.div`
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  @media (max-width: 767px) {
+    height: auto;
+  }
+`;
+
 const AuthenticateForm = styled.form`
   border: 1px solid ${(props) => props.theme.lightGreen};
   border-radius: 30px;
   height: 500px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 0;
+  position: relative;
+  @media (max-width: 767px) {
+    border: none;
+    height: auto;
+  }
 `;
 
 const AuthenticateFormHeader = styled.div`
@@ -35,10 +51,15 @@ const AuthenticateFormHeader = styled.div`
   left: 10%;
   display: inline-block;
   width: auto;
+  @media (max-width: 767px) {
+    position: relative;
+    transform: none;
+  }
 `;
 
 const PromptText = styled.p`
   margin: 0;
+  margin-top: 20px;
   border-top: 1px solid ${(props) => props.theme.lightGreen};
   text-align: center;
   width: 100%;
@@ -107,38 +128,37 @@ const Authenticate = (props) => {
   };
 
   const AuthForm = (
-    <AuthenticateForm
-      onSubmit={handleSubmit}
-      className="offset-1 offset-md-4 col-10 col-md-4 my-auto"
-    >
-      <AuthenticateFormHeader>
-        {loggingIn ? "Login" : "Sign Up"}
-      </AuthenticateFormHeader>
-      <div style={{ margin: "auto" }}>
-        <FormInput
-          label="Email"
-          type="text"
-          value={emailInput}
-          change={(event) => setEmailInput(event.target.value)}
-        />
-        <FormInput
-          label="Password"
-          type="password"
-          value={passwordInput}
-          change={(event) => setPasswordInput(event.target.value)}
-        />
-        {!loggingIn && (
+    <AuthenticateFormContainer className="offset-1 offset-md-4 col-10 col-md-4">
+      <AuthenticateForm onSubmit={handleSubmit}>
+        <AuthenticateFormHeader>
+          {loggingIn ? "Login" : "Sign Up"}
+        </AuthenticateFormHeader>
+        <div style={{ margin: "auto" }}>
           <FormInput
-            label="Verify Password"
-            type="password"
-            value={passwordVerifyInput}
-            change={(event) => setPasswordVerifyInput(event.target.value)}
+            label="Email"
+            type="text"
+            value={emailInput}
+            change={(event) => setEmailInput(event.target.value)}
           />
-        )}
-        <FormSubmit val={loggingIn ? "Login" : "Sign Up"} />
-      </div>
-      {promptText}
-    </AuthenticateForm>
+          <FormInput
+            label="Password"
+            type="password"
+            value={passwordInput}
+            change={(event) => setPasswordInput(event.target.value)}
+          />
+          {!loggingIn && (
+            <FormInput
+              label="Verify Password"
+              type="password"
+              value={passwordVerifyInput}
+              change={(event) => setPasswordVerifyInput(event.target.value)}
+            />
+          )}
+          <FormSubmit val={loggingIn ? "Login" : "Sign Up"} />
+        </div>
+        {promptText}
+      </AuthenticateForm>
+    </AuthenticateFormContainer>
   );
 
   return (

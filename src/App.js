@@ -20,7 +20,7 @@ import { withAuthProvider } from "./session";
 const AppContainer = styled.div`
   background: ${(props) => props.theme.white};
   @media (max-width: 767px) {
-    margin-top: 80px;
+    margin-top: 50px;
   }
 `;
 
@@ -28,7 +28,7 @@ const App = (props) => {
   return (
     <BrowserRouter>
       <AppContainer className="container-fluid">
-        <div className="row" style={{ minHeight: "100vh" }}>
+        <div className="row">
           <SidebarNav />
           <Route exact path={ROUTES.HOME} component={Home} />
           <Route path={ROUTES.SEARCH} component={Search} />

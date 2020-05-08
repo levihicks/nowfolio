@@ -19,6 +19,7 @@ const StyledSearchInput = styled.input`
   outline: none;
   font-size: 1.5rem;
   flex-grow: 1;
+  overflow: auto;
   &::placeholder {
     color: ${(props) => props.theme.gray};
   }
