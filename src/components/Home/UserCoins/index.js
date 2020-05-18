@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
+import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
+
 import * as actions from "../../../store/actions";
 import ViewOption from "./ViewOption";
 import CoinList from "./CoinList";
-import styled from "styled-components";
 import { AuthContext } from "../../../session";
 
 const StyledUserCoins = styled.div`
@@ -29,13 +30,18 @@ const Total = styled.div`
 const UserCoins = (props) => {
   const [portfolio, setPortfolio] = useState([]);
   const [watchlist, setWatchlist] = useState([]);
+  const [portfolioActive, setPortfolioActive] = useState(true);
+
   const userCoins = useSelector((state) => state.userCoins.userCoins);
 
   const authContext = useContext(AuthContext);
+
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(actions.fetchUserCoins(authContext && authContext.uid));
   }, [authContext, dispatch]);
+
   useEffect(() => {
     const newPortfolio = [];
     const newWatchlist = [];
@@ -45,8 +51,6 @@ const UserCoins = (props) => {
     setPortfolio(newPortfolio);
     setWatchlist(newWatchlist);
   }, [userCoins]);
-
-  const [portfolioActive, setPortfolioActive] = useState(true);
 
   const toggleActive = () => setPortfolioActive(!portfolioActive);
 

@@ -7,7 +7,7 @@ const initialState = {
   userCoins: [],
 };
 
-const addUserCoinStart = (state, action) => {
+const addUserCoinStart = (state) => {
   return updateObject(state, {
     loading: true,
     error: false,
@@ -45,7 +45,7 @@ const removeUserCoinFail = (state, action) => {
   });
 };
 
-const updateUserCoinStart = (state, action) => {
+const updateUserCoinStart = (state) => {
   return updateObject(state, {
     loading: true,
     error: false,
@@ -72,7 +72,7 @@ const updateUserCoinFail = (state, action) => {
   });
 };
 
-const fetchUserCoinsStart = (state, action) => {
+const fetchUserCoinsStart = (state) => {
   return updateObject(state, {
     loading: true,
     error: false,

@@ -1,13 +1,14 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
+import { compose } from "recompose";
+import { Redirect, useLocation } from "react-router-dom";
+
 import FormInput from "../UI/FormInput";
 import FormSubmit from "../UI/FormSubmit";
 import { AuthContext } from "../../session";
 import Spinner from "../UI/Spinner";
 import * as ROUTES from "../../constants/routes";
-import { Redirect, useLocation } from "react-router-dom";
 import withErrorModal from "../../hoc/withErrorModal";
-import { compose } from "recompose";
 
 import {
   doCreateUserWithEmailAndPassword,
@@ -78,14 +79,17 @@ const LinkButton = styled.button`
 `;
 
 const Authenticate = (props) => {
+  const { setError } = props;
+
   const currentPath = useLocation().pathname;
+
   const loggingIn = useState(currentPath === ROUTES.SIGN_IN)[0];
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [passwordVerifyInput, setPasswordVerifyInput] = useState("");
   const [loading, setLoading] = useState(false);
+
   const auth = useContext(AuthContext);
-  const { setError } = props;
 
   const toggleAuthenticateMode = (event) => {
     event.preventDefault();
@@ -162,9 +166,9 @@ const Authenticate = (props) => {
   );
 
   return (
-    <React.Fragment>
+    <>
       {loading ? <Spinner /> : auth ? <Redirect to={ROUTES.HOME} /> : AuthForm}
-    </React.Fragment>
+    </>
   );
 };
 

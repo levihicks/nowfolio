@@ -1,17 +1,16 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
+import { NavLink } from "react-router-dom";
 
+import { AuthContext } from "../../session";
+import * as ROUTES from "../../constants/routes";
+
+import HamburgerIcon from "../../assets/hamburger.svg";
 import NowfolioIcon from "../../assets/nowfolio.svg";
 import HomeIcon from "../../assets/home.svg";
 import SearchIcon from "../../assets/search.svg";
-//import CompareIcon from '../../assets/compare.svg';
 import SignInIcon from "../../assets/signIn.svg";
 import AccountIcon from "../../assets/account.svg";
-import { NavLink } from "react-router-dom";
-import { AuthContext } from "../../session";
-import HamburgerIcon from "../../assets/hamburger.svg";
-
-import * as ROUTES from "../../constants/routes";
 
 const StyledSidebarNav = styled.div`
   background: ${(props) => props.theme.black};
@@ -134,15 +133,6 @@ const SidebarNav = (props) => {
           <NavEl src={SearchIcon} />
           <MobileMenuText>Search</MobileMenuText>
         </StyledNavLink>
-        {/*
-                <StyledNavLink 
-                    to={ROUTES.COMPARE} 
-                    activeStyle={sidebarActiveStyle} 
-                    onClick={() => setMenuActive(false)}>
-                    <NavEl src={CompareIcon} />
-                    <MobileMenuText>Compare</MobileMenuText>
-                </StyledNavLink>
-                */}
         {authContext ? (
           <StyledNavLink
             to={ROUTES.ACCOUNT}

@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
+import { Redirect } from "react-router-dom";
+
 import { doSignOut } from "../../firebase";
 import { AuthContext } from "../../session";
 import * as ROUTES from "../../constants/routes";
-import { Redirect } from "react-router-dom";
 import FormSubmit from "../UI/FormSubmit";
 
 const AccountPage = styled.div`
@@ -27,7 +28,6 @@ const Account = () => {
       <FormSubmit
         click={(event) => {
           event.preventDefault();
-          console.log("clicked");
           doSignOut();
         }}
         val="Sign Out"

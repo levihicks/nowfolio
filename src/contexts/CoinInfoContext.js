@@ -5,11 +5,9 @@ import { CoinsContext } from "./CoinsContext";
 export const CoinInfoContext = React.createContext(null);
 
 export const withCoinInfoContextProvider = (Component) => (props) => {
-  const allCoins = useContext(CoinsContext);
-
   const [currentCoin, setCurrentCoin] = useState(null);
-
   const [id, setId] = useState(null);
+  const allCoins = useContext(CoinsContext);
 
   const setNewCoin = useCallback(() => {
     setCurrentCoin(

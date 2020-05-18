@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+
 import FormInput from "../../UI/FormInput";
 import FormSubmit from "../../UI/FormSubmit";
 import * as actions from "../../../store/actions";
@@ -15,14 +16,16 @@ const StyledForm = styled.form`
 `;
 
 const AddToPortfolioForm = (props) => {
+  const { currentCoin, submitted, currentQuantity, currentPrice } = props;
+
+  const [quantity, setQuantity] = useState(currentQuantity || "");
+  const [price, setPrice] = useState(currentPrice || "");
+
   const dispatch = useDispatch();
 
   const authContext = useContext(AuthContext);
-  const { currentCoin, submitted, currentQuantity, currentPrice } = props;
 
   const uid = authContext && authContext.uid;
-  const [quantity, setQuantity] = useState(currentQuantity || "");
-  const [price, setPrice] = useState(currentPrice || "");
 
   const handleSubmit = () => {
     if (currentQuantity) {

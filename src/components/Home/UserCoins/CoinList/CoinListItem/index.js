@@ -1,12 +1,15 @@
 import React, { useContext, useState } from "react";
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import OptionsIcon from "../../../../../assets/listItemOptions.svg";
+import { useDispatch } from "react-redux";
+
 import { CoinInfoContext } from "../../../../../contexts/CoinInfoContext";
 import * as actions from "../../../../../store/actions";
 import { AuthContext } from "../../../../../session";
 import Modal from "../../../../UI/Modal";
 import AddToPortfolioForm from "../../../../CoinInfo/AddToPortfolioForm";
+
+import OptionsIcon from "../../../../../assets/listItemOptions.svg";
+
 const StyledCoinListItem = styled.div`
   border-top: 1px solid ${(props) => props.theme.gray};
   display: flex;
@@ -55,19 +58,18 @@ const CoinListItem = ({
   openOptions,
   coinId,
 }) => {
+  const [editing, setEditing] = useState(false);
+
   const dispatch = useDispatch();
 
-  const id = `${tag}-${quoteCurrency}`;
-
   const coinInfoContext = useContext(CoinInfoContext);
-
   const authContext = useContext(AuthContext);
-
-  const [editing, setEditing] = useState(false);
 
   const setCoinInfo = () => {
     coinInfoContext.setNewCoin(coinId);
   };
+
+  const id = `${tag}-${quoteCurrency}`;
 
   const toggleOptions = () => {
     if (hasOptionsActive === id) openOptions(null);
@@ -89,13 +91,6 @@ const CoinListItem = ({
         {id} {quantity && `(${quantity})`}
       </CoinListItemEl>
       <CoinListItemEl>{price}</CoinListItemEl>
-      {/*
-            <CoinListItemEl 
-                style={{fontSize: ".75rem", 
-                    color: delta[0] === "-" ? "#A82C33" : "#2BA84A"}}>
-                {delta}
-            </CoinListItemEl>
-            */}
       <CoinListItemEl>
         <img
           height="30"

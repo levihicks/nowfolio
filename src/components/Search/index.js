@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
+import styled from "styled-components";
+import { compose } from "recompose";
+
 import Searchbar from "./Searchbar";
 import SearchResults from "./SearchResults";
-import styled from "styled-components";
 import withErrorModal from "../../hoc/withErrorModal";
-import { compose } from "recompose";
 import { CoinsContext } from "../../contexts/CoinsContext";
 
 const SearchPage = styled.div`
@@ -34,7 +35,6 @@ const Search = (props) => {
 
   return (
     <SearchPage className="offset-md-2 col-md-8">
-      {/* {error && <Modal hide={() => setError(null)}>{error.message}</Modal>} */}
       <Searchbar
         change={(inputVal) => changeHandler(inputVal)}
         value={searchInput}

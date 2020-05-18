@@ -7,10 +7,11 @@ import {
   YAxis,
   Tooltip,
 } from "recharts";
+import { compose } from "recompose";
+
 import { coinbaseAxios } from "../../../axios";
 import withErrorModal from "../../../hoc/withErrorModal";
 import Spinner from "../../UI/Spinner";
-import { compose } from "recompose";
 
 const timespans = {
   "Past Day": [3600, 24],
@@ -20,8 +21,10 @@ const timespans = {
 
 const CoinChart = (props) => {
   const { currentCoin, timespan } = props;
+
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     let [granularity, dataPoints] = timespans[timespan];
     setLoading(true);
@@ -52,6 +55,7 @@ const CoinChart = (props) => {
       <Spinner />
     </div>
   );
+
   if (data.length > 0 && !loading) {
     let floor = Math.min(...data.map((d) => d["Price"]));
     let ceiling = Math.max(...data.map((d) => d["Price"]));

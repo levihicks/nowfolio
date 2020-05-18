@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
+
 import CoinListItem from "./CoinListItem";
 import { CoinInfoContext } from "../../../../contexts/CoinInfoContext";
 import PlaceholderMsg from "../../../UI/PlaceholderMsg";
@@ -8,11 +9,11 @@ import Spinner from "../../../UI/Spinner";
 const CoinList = (props) => {
   const { coinList } = props;
 
+  const [hasOptionsActive, setHasOptionsActive] = useState(null);
+
   const coinInfoContext = useContext(CoinInfoContext);
 
   const loading = useSelector((state) => state.userCoins.loading);
-
-  const [hasOptionsActive, setHasOptionsActive] = useState(null);
 
   const listContent =
     coinList.length > 0 ? (

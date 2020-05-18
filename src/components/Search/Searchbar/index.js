@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
+
 import SearchbarSearchIcon from "../../../assets/searchbox_search.svg";
 import ClearIcon from "../../../assets/clear.svg";
 

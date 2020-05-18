@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+
 import Modal from "../../components/UI/Modal";
+
 import ErrorIcon from "../../assets/error.svg";
 
 const ErrorModalContent = styled.div`

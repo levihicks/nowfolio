@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import DropdownIcon from "../../../assets/dropdown.svg";
 import styled from "styled-components";
+
+import DropdownIcon from "../../../assets/dropdown.svg";
 
 const StyledTimespanSelect = styled.div`
   border: 1px solid ${(props) => props.theme.gray};
@@ -46,7 +47,9 @@ const TimespanOptionEl = styled.button`
 
 const TimespanSelect = (props) => {
   const timespans = ["Past Day", "Past Week", "Past Month"];
+
   const { selectedTimespan, setSelectedTimespan } = props;
+
   const [optionsDisplayed, setOptionsDisplayed] = useState(false);
 
   return (

@@ -3,10 +3,12 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 import createSagaMiddleware from "redux-saga";
+
 import "./index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { userCoinsReducer } from "./store/reducers";
 import { watchUserCoins } from "./store/sagas";
 

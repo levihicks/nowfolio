@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+
 import UserCoins from "./UserCoins";
 import CoinInfo from "../CoinInfo";
 

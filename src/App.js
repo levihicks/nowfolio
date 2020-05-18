@@ -4,7 +4,6 @@ import { BrowserRouter, Route } from "react-router-dom";
 import styled from "styled-components";
 
 import { withTheme } from "./components/Theme";
-
 import SidebarNav from "./components/SidebarNav";
 import * as ROUTES from "./constants/routes";
 import Home from "./components/Home";

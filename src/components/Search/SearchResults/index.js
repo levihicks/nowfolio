@@ -1,10 +1,8 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
+import { withRouter } from "react-router-dom";
 
 import { CoinInfoContext } from "../../../contexts/CoinInfoContext";
-
-//import {compose} from 'recompose';
-import { withRouter } from "react-router-dom";
 import * as ROUTES from "../../../constants/routes";
 
 const SearchResultsBase = styled.div`
