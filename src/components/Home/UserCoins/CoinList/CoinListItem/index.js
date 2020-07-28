@@ -66,7 +66,7 @@ const CoinListItem = ({
   const authContext = useContext(AuthContext);
 
   const setCoinInfo = () => {
-    coinInfoContext.setNewCoin(coinId);
+    coinInfoContext.setNewCoin(tag + "-" + quoteCurrency);
   };
 
   const id = `${tag}-${quoteCurrency}`;
@@ -117,9 +117,10 @@ const CoinListItem = ({
           )}
           {quantity && <button onClick={() => setEditing(true)}>Edit</button>}
           <button
-            onClick={() =>
-              dispatch(actions.removeUserCoin(coinId, authContext.uid))
-            }
+            onClick={() => {
+              dispatch(actions.removeUserCoin(coinId, authContext.uid));
+              coinInfoContext.setNewCoin(null);
+            }}
           >
             Remove
           </button>

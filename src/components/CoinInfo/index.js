@@ -154,8 +154,6 @@ const CoinInfo = (props) => {
 
   const params = useParams();
 
-  let { setNewCoin } = coinInfoContext;
-
   const bootstrapProps =
     props.bootstrapProps || "offset-xs-0 offset-md-3 col-xs-10 col-md-6 ";
 
@@ -211,11 +209,11 @@ const CoinInfo = (props) => {
     }
   }, [coinInfoContext.currentCoin, fetchCoinInfo, userCoins]);
 
-  useEffect(() => {
-    return () => {
-      setNewCoin(null);
-    };
-  }, [setNewCoin]);
+  // useEffect(() => {
+  //   return () => {
+  //     setNewCoin(null);
+  //   };
+  // }, [setNewCoin]);
 
   useEffect(() => {
     if (!coinInfoContext.currentCoin && params.id)

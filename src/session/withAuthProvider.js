@@ -5,18 +5,14 @@ import { authObserver } from "../firebase";
 export const AuthContext = React.createContext(null);
 
 const withAuthProvider = (Component) => (props) => {
-  const [authState, setAuthState] = useState(
-    JSON.parse(localStorage.getItem("authUser"))
-  );
+  const [authState, setAuthState] = useState();
 
   useEffect(() => {
     let listener = authObserver(
       (authUser) => {
-        localStorage.setItem("authUser", JSON.stringify(authUser));
         setAuthState(authUser);
       },
       () => {
-        localStorage.removeItem("authUser");
         setAuthState(null);
       }
     );

@@ -20,7 +20,7 @@ const timespans = {
 };
 
 const CoinChart = (props) => {
-  const { currentCoin, timespan } = props;
+  const { currentCoin, timespan, setError } = props;
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -45,10 +45,10 @@ const CoinChart = (props) => {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        setError(err);
         setLoading(false);
       });
-  }, [timespan, currentCoin]);
+  }, [timespan, currentCoin, setError]);
 
   let content = (
     <div style={{ minHeight: "300px" }}>
@@ -62,14 +62,16 @@ const CoinChart = (props) => {
     floor -= (ceiling - floor) / 2;
     ceiling += (ceiling - floor) / 2;
     content = (
-      <ResponsiveContainer width="100%" height={400}>
-        <LineChart data={data} margin={{ top: 20, bottom: 20, right: 5 }}>
-          <XAxis dataKey="Name" />
-          <YAxis hide domain={[floor, ceiling]} />
-          <Tooltip />
-          <Line type="monotone" dataKey="Price" stroke="#2BA84A" />
-        </LineChart>
-      </ResponsiveContainer>
+      <>
+        <ResponsiveContainer width="100%" height={400}>
+          <LineChart data={data} margin={{ top: 20, bottom: 20, right: 5 }}>
+            <XAxis dataKey="Name" />
+            <YAxis hide domain={[floor, ceiling]} />
+            <Tooltip />
+            <Line type="monotone" dataKey="Price" stroke="#2BA84A" />
+          </LineChart>
+        </ResponsiveContainer>
+      </>
     );
   }
   return content;

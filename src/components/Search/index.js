@@ -15,6 +15,7 @@ const Search = (props) => {
   const coinsContext = useContext(CoinsContext);
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState(null);
+
   const fetchResults = () => {
     if (searchInput !== "")
       setSearchResults(
