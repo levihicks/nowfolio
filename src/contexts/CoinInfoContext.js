@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import { CoinsContext } from "./CoinsContext";
 
@@ -9,21 +9,26 @@ export const withCoinInfoContextProvider = (Component) => (props) => {
   const [id, setId] = useState(null);
   const allCoins = useContext(CoinsContext);
 
-  const setNewCoin = useCallback(() => {
-    setCurrentCoin(
-      id && allCoins
-        ? allCoins.filter((c) => id === c.tag + "-" + c.quoteCurrency)[0]
-        : null
-    );
-  }, [allCoins, id]);
-
   useEffect(() => {
-    setNewCoin();
-  }, [setNewCoin]);
+    if (
+      id &&
+      allCoins &&
+      (!currentCoin || currentCoin.tag !== id.split("-")[0])
+    ) {
+      setCurrentCoin(
+        allCoins.filter((c) => id === c.tag + "-" + c.quoteCurrency)[0]
+      );
+    } else if (!id && currentCoin) {
+      setCurrentCoin(null);
+    }
+  }, [allCoins, id, currentCoin]);
 
   return (
     <CoinInfoContext.Provider
-      value={{ currentCoin: currentCoin, setNewCoin: setId }}
+      value={{
+        currentCoin: currentCoin,
+        setNewCoin: setId,
+      }}
     >
       <Component {...props} />
     </CoinInfoContext.Provider>

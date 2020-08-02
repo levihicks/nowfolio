@@ -141,11 +141,13 @@ const CoinInfo = (props) => {
   const [inPortfolio, setInPortfolio] = useState(false);
   const [inWatchlist, setInWatchlist] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const [currentTimespan, setCurrentTimespan] = useState("Past Day");
 
   const dispatch = useDispatch();
 
   const userCoins = useSelector((state) => state.userCoins.userCoins);
+  const userCoinsLoading = useSelector((state) => state.userCoins.loading);
 
   const currentPath = useLocation().pathname;
 
@@ -209,20 +211,24 @@ const CoinInfo = (props) => {
     }
   }, [coinInfoContext.currentCoin, fetchCoinInfo, userCoins]);
 
-  // useEffect(() => {
-  //   return () => {
-  //     setNewCoin(null);
-  //   };
-  // }, [setNewCoin]);
-
   useEffect(() => {
     if (!coinInfoContext.currentCoin && params.id)
       coinInfoContext.setNewCoin(params.id);
   });
 
+  useEffect(() => {
+    dispatch(actions.fetchUserCoins(authContext && authContext.uid));
+  }, [authContext, dispatch]);
+
   let content = <Spinner />;
 
-  if (!coinInfoContext.currentCoin && !params.id && !loading) content = <></>;
+  if (
+    !coinInfoContext.currentCoin &&
+    !params.id &&
+    !loading &&
+    !userCoinsLoading
+  )
+    content = <></>;
 
   const uid = authContext && authContext.uid;
 
@@ -242,7 +248,12 @@ const CoinInfo = (props) => {
     dispatch(actions.removeUserCoin(coinToRemove, uid));
   };
 
-  if (coinInfo && coinInfoContext.currentCoin && !loading) {
+  if (
+    coinInfo &&
+    coinInfoContext.currentCoin &&
+    !loading &&
+    !userCoinsLoading
+  ) {
     content = (
       <React.Fragment>
         {addingToPortfolio && (
@@ -270,6 +281,7 @@ const CoinInfo = (props) => {
         </CoinInfoTopRow>
         <CoinInfoTopRow>
           <CoinName>{coinInfoContext.currentCoin.name}</CoinName>
+
           <div style={{ marginLeft: "auto", display: "flex" }}>
             <div style={{ position: "relative" }}>
               <CoinInfoButton
@@ -345,4 +357,4 @@ const CoinInfo = (props) => {
   return <StyledCoinInfo className={bootstrapProps}>{content}</StyledCoinInfo>;
 };
 
-export default compose(withRouter, withErrorModal)(CoinInfo);
+export default compose(withRouter, withErrorModal)(React.memo(CoinInfo));

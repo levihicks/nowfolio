@@ -17,7 +17,7 @@ const CoinList = (props) => {
 
   const listContent =
     coinList.length > 0 ? (
-      coinList.map((ts, index) => {
+      coinList.map((ts) => {
         return (
           <CoinListItem
             {...ts}

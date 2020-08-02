@@ -13,7 +13,6 @@ const ErrorModalContent = styled.div`
 
 const withErrorModal = (Component) => (props) => {
   const [error, setError] = useState(null);
-
   return (
     <React.Fragment>
       {error && (
