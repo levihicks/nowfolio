@@ -35,13 +35,16 @@ const Search = (props) => {
   };
 
   return (
-    <SearchPage className="offset-md-2 col-md-8">
-      <Searchbar
-        change={(inputVal) => changeHandler(inputVal)}
-        value={searchInput}
-      />
-      {searchResults && <SearchResults searchResults={searchResults} />}
-    </SearchPage>
+    <>
+      <SearchPage style={props.style} className="offset-md-2 col-md-8">
+        <Searchbar
+          change={(inputVal) => changeHandler(inputVal)}
+          value={searchInput}
+        />
+
+        {searchResults && <SearchResults searchResults={searchResults} />}
+      </SearchPage>
+    </>
   );
 };
 

@@ -25,7 +25,9 @@ const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
   rootReducer,
-  composeEnhancers(applyMiddleware(sagaMiddleware))
+  composeEnhancers
+    ? composeEnhancers(applyMiddleware(sagaMiddleware))
+    : applyMiddleware(sagaMiddleware)
 );
 
 sagaMiddleware.run(watchUserCoins);

@@ -13,7 +13,9 @@ export const withCoinInfoContextProvider = (Component) => (props) => {
     if (
       id &&
       allCoins &&
-      (!currentCoin || currentCoin.tag !== id.split("-")[0])
+      (!currentCoin ||
+        currentCoin.tag !== id.split("-")[0] ||
+        currentCoin.quoteCurrency !== id.split("-")[1])
     ) {
       setCurrentCoin(
         allCoins.filter((c) => id === c.tag + "-" + c.quoteCurrency)[0]
